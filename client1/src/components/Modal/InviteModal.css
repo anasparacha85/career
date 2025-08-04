@@ -1,0 +1,172 @@
+#invite-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+#invite-modal-content {
+  background-color: white;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+#invite-modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#invite-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+#invite-modal-subtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0.25rem 0 0 0;
+}
+
+#invite-modal-close-button {
+  padding: 0.5rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+#invite-modal-close-button:hover {
+  background-color: #f3f4f6;
+}
+
+#invite-modal-close-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+#invite-modal-body {
+  padding: 1.5rem;
+}
+
+.invite-modal-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.invite-modal-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.invite-modal-label-icon {
+  width: 1rem;
+  height: 1rem;
+  display: inline;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.invite-modal-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.invite-modal-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.invite-modal-test-summary {
+  background-color: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.invite-modal-summary-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.75rem 0;
+}
+
+.invite-modal-summary-details {
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+#invite-modal-buttons {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 1rem;
+}
+
+.invite-modal-cancel-button {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: transparent;
+  color: #64748b;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.invite-modal-cancel-button:hover {
+  background-color: #f3f4f6;
+}
+
+.invite-modal-submit-button {
+  flex: 1;
+  padding: 0.75rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.invite-modal-submit-button:hover {
+  background-color: #2563eb;
+}
+
+.invite-modal-button-icon {
+  width: 1rem;
+  height: 1rem;
+}

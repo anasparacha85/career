@@ -1,0 +1,145 @@
+.sidebar-container {
+  width: 300px;
+ height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ddd;
+  background-color: #fff;
+  margin-top: 8px;
+}
+
+.sidebar-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  
+}
+
+.sidebar-title .icon {
+  margin-right: 8px;
+}
+
+.clear-all {
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sidebar-scroll {
+  flex: 1;
+  overflow-y: hidden;
+  padding: 10px 16px;
+
+  
+}
+
+.sidebar-section {
+  margin-bottom: 10px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  background-color: #f6f7f9;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border-radius: 30px;
+}
+
+.section-subtitle {
+  margin-left: 12px; /* Indent */
+  padding: 6px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 3px;
+  color: #333;
+  background-color: transparent;
+   background-color: #f6f7f9;
+   border-radius: 30px;
+
+}
+
+.section-options {
+  padding: 8px 10px 0 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section-options label {
+  font-size: 14px;
+}
+
+.sticky-footer {
+  padding: 12px;
+  border-top: 1px solid #eee;
+  background: #fff;
+  position: sticky;
+  bottom: 0;
+ 
+}
+
+.apply-btn {
+  width: 100%;
+  background-color: orangered;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border: none;
+ 
+  cursor: pointer;
+  border-radius: 30px;
+}
+
+/* Responsive hamburger menu */
+.hamburger {
+  display: none;
+  font-size: 26px;
+  padding: 3px 6px;
+  position: fixed;
+  top: 110px;
+  right: 5px;
+  background: rgb(194, 188, 188);
+  border: none;
+  z-index: 1100;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+/* Overlay on mobile */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+/* Mobile sidebar slide-in effect */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    
+  }
+
+  .sidebar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    height: 100vh;
+    width: 80%;
+    max-width: 300px;
+    transition: transform 0.3s ease;
+    z-index: 1050;
+    
+  }
+
+  .sidebar-container.open {
+    transform: translateX(0);
+  }
+}
