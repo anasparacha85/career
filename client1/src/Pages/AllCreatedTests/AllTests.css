@@ -130,6 +130,11 @@
   margin: 0 auto 1rem auto;
   color: #cbd5e1;
 }
+.flex-buttons{
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
 #all-tests-grid {
   display: grid;
@@ -226,13 +231,36 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  
+  
 }
 
 .all-tests-invite-button:hover {
-  background-color: orangered;
+  background-color: rgb(245, 233, 229);
+  color: orangered;
+    
+  
 }
 
 .all-tests-button-icon {
   width: 1rem;
   height: 1rem;
+}
+
+@media (max-width:830px) {
+  #all-tests-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+}
+
+
+@media (max-width:530px) {
+  #all-tests-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+  
 }

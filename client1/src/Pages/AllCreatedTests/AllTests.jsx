@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Search, Mail, User, Briefcase, X, Send, Clock, FileText, Target } from 'lucide-react';
+import { Search, Mail, User, Briefcase, X, Send, Clock, FileText, Target, UserRound } from 'lucide-react';
 import './AllTests.css';
 import InviteModal from '../../components/Modal/InviteModal';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import LoadingState from '../../components/States/LoadingState';
 
 
 const AllTests = () => {
@@ -15,19 +17,32 @@ const AllTests = () => {
     name: '',
     position: ''
   });
+  const [Error, setError] = useState(null)
+  const [Loading, setLoading] = useState(false)
+
+  const navigate=useNavigate()
 
   const fetchTests = async () => {
     try {
+      setLoading(true)
+      setError(null)
       const res = await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_API}/test/all-tests`, {
         method: 'GET',
       });
       const data = await res.json();
       console.log(data);
+      if(res.ok){
+         setTests(data);
 
+      }
       
-      setTests(data);
+     
     } catch (err) {
       console.error('Error fetching tests:', err);
+      setError(err.FailureMessage ||'Error fetching tests:')
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -89,6 +104,18 @@ const AllTests = () => {
   );
 
   const selectedTest = tests.find(test => test._id === selectedTestId);
+
+  if(Loading){
+    return (
+        
+            <LoadingState text={'Loading Created tests...'}/>
+        
+
+        
+        
+
+    )
+  }
 
   return (
     <div id="all-tests-container">
@@ -186,7 +213,7 @@ const AllTests = () => {
                       <p className="all-tests-detail-value">{test.passingScore}%</p>
                     </div>
                   </div>
-                  
+                  <div className='flex-buttons'>
                   <button
                     className="all-tests-invite-button"
                     onClick={() => handleOpenModal(test._id)}
@@ -194,6 +221,14 @@ const AllTests = () => {
                     <Mail className="all-tests-button-icon" />
                     Send Invitation
                   </button>
+                   <button
+                    className="all-tests-invite-button"
+                    onClick={() => navigate(`all-invites/${test._id}`)}
+                  >
+                    <UserRound className="all-tests-button-icon" />
+                    Check invites status
+                  </button>
+                  </div>
                 </div>
               </div>
             ))}

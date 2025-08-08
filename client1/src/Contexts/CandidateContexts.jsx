@@ -1,4 +1,4 @@
-import { createContext,useContext, useState } from "react";
+import { createContext,useContext, useRef, useState } from "react";
 const CandidateContext=createContext()
 
 export const CandidateContextProvider=({children})=>{
@@ -7,7 +7,12 @@ export const CandidateContextProvider=({children})=>{
     const [TestLink, setTestLink] = useState("")
     const [testData, setTestData] = useState(null)
     const [attemptedData, setAttemptedData] = useState(null)
-    return <CandidateContext.Provider value={{selectedCategory,setselectedCategory,selectedItem,setselectedItem,TestLink,setTestLink,testData,setTestData,attemptedData,setAttemptedData}}>
+    const mediaRecorderRef = useRef(null);
+    const recordedChunks = useRef([]);
+    const [webcamStream, setWebcamStream] = useState(null);
+    const [screenStream, setScreenStream] = useState(null);
+    const [InvitationStatus, setInvitationStatus] = useState('')
+    return <CandidateContext.Provider value={{selectedCategory,setselectedCategory,selectedItem,setselectedItem,TestLink,setTestLink,testData,setTestData,attemptedData,setAttemptedData,webcamStream,setWebcamStream,recordedChunks,mediaRecorderRef,screenStream,setScreenStream,InvitationStatus,setInvitationStatus}}>
         {children}
     </CandidateContext.Provider>
 }

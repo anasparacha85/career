@@ -1,7 +1,6 @@
 /* Results Page Specific Styles - All IDs prefixed with 'results-' */
 #results-page-container {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: #f9fafb;
   min-height: 100vh;
   padding: 20px;
   max-width: 1200px;
@@ -36,6 +35,18 @@
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+#results-user-email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 #results-completion-date {
@@ -151,6 +162,46 @@
 .results-stat-label {
   font-size: 14px;
   color: #6b7280;
+}
+
+/* Video Recording Section */
+#results-video-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+#results-video-title {
+  color: #374151;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+}
+
+#results-video-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgb(245, 135, 95) 0%, orangered 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  justify-content: center;
+  font-size: 14px;
+}
+
+#results-video-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgb(243, 202, 187)
+}
+
+#results-video-btn:active {
+  transform: translateY(0);
 }
 
 #results-details-panel {
@@ -272,6 +323,113 @@
   background: orange;
 }
 
+/* Video Modal Styles */
+#results-video-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+#results-video-modal {
+  background: white;
+  border-radius: 16px;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+#results-video-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+#results-video-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: #374151;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+#results-video-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #e5e7eb;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+}
+
+#results-video-modal-close:hover {
+  background: #d1d5db;
+  color: #374151;
+}
+
+#results-video-modal-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: #000;
+}
+
+#results-video-player {
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  outline: none;
+}
+
+#results-video-modal-footer {
+  padding: 16px 24px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+#results-video-modal-info {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   #results-page-content {
     grid-template-columns: 1fr;
@@ -281,6 +439,18 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+  }
+  
+  #results-page-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+  }
+  
+  #results-user-email,
+  #results-completion-date {
+    width: fit-content;
   }
   
   #results-stats-grid {
@@ -294,5 +464,26 @@
   #results-review-btn {
     width: 100%;
     justify-content: center;
+  }
+
+  #results-video-modal {
+    width: 95vw;
+    height: 95vh;
+  }
+
+  #results-video-modal-header {
+    padding: 16px 20px;
+  }
+
+  #results-video-modal-title {
+    font-size: 1.1rem;
+  }
+
+  #results-video-player {
+    max-height: 50vh;
+  }
+
+  #results-video-modal-footer {
+    padding: 12px 20px;
   }
 }

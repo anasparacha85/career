@@ -1,47 +1,81 @@
-#create-test-container {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: #f9fafb;
+/* CreateTest.css - Plain CSS conversion from Tailwind */
+
+/* Main container styles */
+.create-test-container {
   min-height: 100vh;
-  padding: 20px;
-  max-width: 1000px;
+  background-color: #f9fafb; /* bg-gray-50 */
+}
+
+.create-test-wrapper {
+  max-width: 56rem; /* max-w-4xl (896px) */
   margin: 0 auto;
+  padding: 1rem 2rem; 
+  /* px-4 py-8 */
 }
 
-#test-header {
-  background: #ffffff;
-  padding: 20px 30px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+@media (min-width: 768px) {
+  .create-test-wrapper {
+    padding: 2rem 1rem;
+  }
 }
 
-#test-info h1 {
-  color: #374151;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 8px 0;
+/* Header card styles */
+.create-test-header {
+  background-color: #ffffff;
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+  border: 1px solid #e5e7eb; /* border-gray-200 */
+  padding: 1.5rem; /* p-6 */
+  margin-bottom: 1.5rem; /* mb-6 */
+   background-color: rgb(250, 247, 246)
 }
 
-#test-info p {
-  color: #6b7280;
+.create-test-header-content {
+  text-align: center;
+ 
+}
+
+.create-test-title {
+  font-size: 1.875rem; /* text-3xl */
+  line-height: 2.25rem;
+  font-weight: 700; /* font-bold */
+  color: #111827; /* text-gray-900 */
+  margin-bottom: 0.5rem; /* mb-2 */
+  margin-top: 0;
+}
+
+.create-test-subtitle {
+  color: #4b5563; /* text-gray-600 */
   margin: 0;
-  font-size: 14px;
 }
 
-#test-content {
-  background: #ffffff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  width: 100%;
+/* Content card styles */
+.create-test-content {
+  background-color: #ffffff;
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+  border: 1px solid #e5e7eb; /* border-gray-200 */
+  padding: 2rem; /* p-8 */
+  
 }
 
-#test-content > * {
-  width: 100%;
-}
-
-@media (max-width: 768px) {
-  #test-content {
-    padding: 24px;
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .create-test-wrapper {
+    padding: 1rem;
+  }
+  
+  .create-test-header {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .create-test-content {
+    padding: 1.5rem;
+  }
+  
+  .create-test-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 }

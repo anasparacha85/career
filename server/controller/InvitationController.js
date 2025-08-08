@@ -1,14 +1,14 @@
 const Attempt = require("../Modals/AttemptSchema");
 const Invitation = require("../Modals/InvitationModal");
 const Test = require("../Modals/TestModal");
-const { v4: uuidv4 } = require('uuid'); 
+const { v4: uuidv4 } = require('uuid');
 
 
 const sendInvitation = async (req, res) => {
   try {
-    const { email,name,position, testId } = req.body;
+    const { email, name, position, testId } = req.body;
 
-    const test = await Test.findOne({_id:testId});
+    const test = await Test.findOne({ _id: testId });
     if (!test) {
       return res.status(404).json({ FailureMessage: 'Test not found' });
     }
@@ -40,24 +40,37 @@ const sendInvitation = async (req, res) => {
   }
 };
 
-
 const submitAttempt = async (req, res) => {
   try {
-    const { token, answers } = req.body;
-    userEmail='amiranas761@gmail.com'
+    console.log('Request Body:', req.body);
+    console.log('Request File:', req.file);
 
-    //   Get testId from token via Invitation collection
-    const invitation = await Invitation.findOne({ token });
 
-    if (!invitation) return res.status(404).json({ FailureMessage: "Invalid or expired token" });
-    // checking whether the test already submitted or not
-    if(invitation.status==='completed'){
-        return res.status(400).json({FailureMessage:"you have already completed the test"})
+    // Get data from form
+    
+    const token=req.body.token;
+    const answers=JSON.parse(req.body.answers)
+    
+    const videoFile = req.file; // This contains the uploaded video info
+
+    if (!token || !answers) {
+      return res.status(400).json({ FailureMessage: "Token and answers are required" });
     }
+
+    const userEmail = 'amiranas761@gmail.com'; // You might want to get this dynamically
+
+    // Token to Test + Invitation
+    const invitation = await Invitation.findOne({ token });
+    if (!invitation) return res.status(404).json({ FailureMessage: "Invalid or expired token" });
+
+    if (invitation.status === 'completed') {
+      return res.status(400).json({ FailureMessage: "You have already completed the test" });
+    }
+
     const test = await Test.findById(invitation.test).populate('questions');
     if (!test) return res.status(404).json({ FailureMessage: "Test not found" });
 
-    //   Check answers
+    // Evaluate Answers
     let correctCount = 0;
     const answerArray = [];
 
@@ -70,63 +83,98 @@ const submitAttempt = async (req, res) => {
       answerArray.push({
         question: question._id,
         selectedAnswer,
-        isCorrect
+        isCorrect,
       });
     }
 
     const score = (correctCount / test.questions.length) * 100;
     const passed = score >= test.passingScore;
 
+    // Get video URL from Cloudinary
+    const videoUrl = req.file?.path || null;
+
     const attempt = new Attempt({
       test: test._id,
+      invitation: invitation._id,
       userEmail,
       answers: answerArray,
       score,
-      passed
+      passed,
+      videoUrl
     });
 
     await attempt.save();
-    await Invitation.updateOne({_id:invitation._id},{$set:{status:'completed',completedAt: new Date()}})
+    await Invitation.updateOne({ _id: invitation._id }, { 
+      $set: { 
+        status: 'completed', 
+        completedAt: new Date() 
+      } 
+    });
 
     res.status(200).json({
-      SuccessMessage: "Attempt submitted",
+      SuccessMessage: "Attempt submitted successfully",
       score,
       passed,
-      attemptId: attempt._id
+      attemptId: attempt._id,
+      videoUrl,
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ FailureMessage: "Internal Server error" });
+    console.error('Error in submitAttempt:', err);
+    res.status(500).json({ 
+      FailureMessage: "Internal Server Error",
+      error: err.message 
+    });
   }
 };
 
-const getAllInvitations=async(req,res)=>{
-    try {
-        const invitations=await Invitation.find()
-        if(invitations.length<=0){
-            return res.status(404).json({FailureMessage:"No Invitation found"})
-        }
-        res.status(200).json(invitations)
-    } catch (error) {
-        res.status(500).json({FailureMessage:"Internal Server Error"})
-        
+
+const getAllAttempts = async (req, res) => {
+  try {
+    const attempts = await Attempt.find()
+    if (attempts.length <= 0) {
+      return res.status(400).json({ FailureMessage: "No Attempts found" })
+
+
     }
+    res.status(200).json(attempts)
+  } catch (error) {
+    res.status(500).json({ FailureMessage: "Internal server error" })
+
+  }
+
+}
+const deleteAllAttempts = async (req, res) => {
+  try {
+    const attempts = await Attempt.find();
+    
+    // Use Promise.all to handle multiple async deletions
+    await Promise.all(
+      attempts.map((value) =>
+        Attempt.deleteOne({ _id: value._id })
+      )
+    );
+
+    res.status(200).json({ message: 'Deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const getInvitationStatus=async(req,res)=>{
+  try {
+    const token=req.params.token;
+    if(!token){
+      return res.status(400).json({FailureMessage:"No invite found"})
+    }
+    const status=await Invitation.findOne({token:token},{status:1,_id:0})
+    res.status(200).json(status)
+  } catch (error) {
+    res.status(500).jsn({FailureMessage:"Internal Server error"})
+    
+  }
 }
 
-const getAllAttempts=async(req,res)=>{
-    try {
-        const attempts=await Attempt.find()
-        if(attempts.length<=0){
-            return res.status(400).json({FailureMessage:"No Attempts found"})
 
 
-        }
-        res.status(200).json(attempts)
-    } catch (error) {
-        res.status(500).json({FailureMessage:"Internal server error"})
-        
-    }
-    
-    }
-
-module.exports={sendInvitation,submitAttempt,getAllInvitations,getAllAttempts}
+module.exports = { sendInvitation, submitAttempt,  getAllAttempts ,deleteAllAttempts,getInvitationStatus}

@@ -1,88 +1,224 @@
-#step3-form {
+/* Step3.css */
+
+/* Base container styles */
+.step3-container {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  gap: 24px;
+  gap: 1.5rem; /* space-y-6 */
 }
 
-#step3-section-title {
-  color: #374151;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 8px 0;
+/* Header section */
+.step3-header {
+  border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+  padding-bottom: 1rem; /* pb-4 */
   text-align: center;
 }
 
-#step3-description {
-  color: #6b7280;
-  text-align: center;
-  margin: 0 0 24px 0;
-  font-size: 1rem;
+.step3-title {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 700; /* font-bold */
+  color: #111827; /* text-gray-900 */
 }
 
-#link-container {
+.step3-subtitle {
+  color: #4b5563; /* text-gray-600 */
+  margin-top: 0.25rem; /* mt-1 */
+}
+
+/* Success card */
+.success-card {
+  background: linear-gradient(to bottom right, #f0fdf4, #ecfdf5); /* bg-gradient-to-br from-green-50 to-emerald-50 */
+  padding: 2rem; /* p-8 */
+  border-radius: 0.75rem; /* rounded-xl */
+  border: 1px solid #bbf7d0; /* border-green-200 */
+}
+
+.success-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* space-y-6 */
+}
+
+.success-icon {
+  width: 4rem; /* w-16 */
+  height: 4rem; /* h-16 */
+  background-color: #dcfce7; /* bg-green-100 */
+  border-radius: 9999px; /* rounded-full */
   display: flex;
   align-items: center;
-  width: 100%;
-  gap: 12px;
-  margin: 20px 0;
+  justify-content: center;
+  margin: 0 auto; /* mx-auto */
 }
 
-#test-link-input {
+.success-heading {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700; /* font-bold */
+  color: #111827; /* text-gray-900 */
+  margin-bottom: 0.5rem; /* mb-2 */
+}
+
+.success-description {
+  color: #4b5563; /* text-gray-600 */
+}
+
+/* Link container */
+.link-container {
+  background-color: white;
+  padding: 1rem; /* p-4 */
+  border-radius: 0.5rem; /* rounded-lg */
+  border: 1px solid #e5e7eb; /* border-gray-200 */
+  max-width: 42rem; /* max-w-2xl */
+  margin: 0 auto; /* mx-auto */
+}
+
+.link-label {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 600; /* font-semibold */
+  color: #374151; /* text-gray-700 */
+  margin-bottom: 0.75rem; /* mb-3 */
+}
+
+.link-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* gap-3 */
+}
+
+.link-input {
   flex: 1;
-  padding: 12px 16px;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 16px;
-  background: #f9fafb;
-  color: #374151;
+  padding: 0.75rem 1rem; /* px-4 py-3 */
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  background-color: #f9fafb; /* bg-gray-50 */
+  color: #111827; /* text-gray-900 */
+  font-size: 0.875rem; /* text-sm */
 }
 
-#test-link-input:focus {
-  outline: none;
-  border-color: orangered;
-}
-
-#copy-link-btn {
-  background: orangered;
+.copy-btn {
+  background-color: orangered; /* bg-blue-600 */
   color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
-  transition: all 0.2s ease;
+  padding: 0.75rem 1.5rem; /* px-6 py-3 */
+  border-radius: 0.5rem; /* rounded-lg */
+  font-weight: 600; /* font-semibold */
+  transition: all 0.2s; /* transition-all duration-200 */
   display: flex;
   align-items: center;
-  gap: 8px;
+  border-color: transparent;
+  gap: 0.5rem; /* gap-2 */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+  white-space: nowrap; /* whitespace-nowrap */
+  cursor: pointer;
 }
 
-#copy-link-btn:hover {
-  background: orange;
+.copy-btn:hover {
+  background-color: rgb(244, 227, 222); /* hover:bg-blue-700 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  color: orangered; 
 }
 
-#step3-button-row {
+/* Next steps */
+.next-steps {
+  font-size: 0.875rem; /* text-sm */
+  color: #4b5563; /* text-gray-600 */
+  background-color: #eff6ff; /* bg-blue-50 */
+  padding: 1rem; /* p-4 */
+  border-radius: 0.5rem; /* rounded-lg */
+  border: 1px solid #bfdbfe; /* border-blue-200 */
+}
+
+.next-steps strong {
+  font-weight: 600;
+}
+
+.next-steps-list {
+  margin-top: 0.5rem; /* mt-2 */
+  text-align: left;
   display: flex;
-  justify-content: space-between;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
-  width: 100%;
+  flex-direction: column;
+  gap: 0.25rem; /* space-y-1 */
 }
 
-/* Responsive styles */
+/* Footer buttons */
+.step3-footer {
+  display: flex;
+  justify-content: flex-end; /* justify-between */
+  padding-top: 1.5rem; /* pt-6 */
+  border-top: 1px solid #e5e7eb; /* border-t border-gray-200 */
+}
+
+.back-btn {
+  background-color: #f3f4f6; /* bg-gray-100 */
+  color: #374151; /* text-gray-700 */
+  padding: 0.75rem 1.5rem; /* px-6 py-3 */
+  border-radius: 0.5rem; /* rounded-lg */
+  font-weight: 600; /* font-semibold */
+  transition: all 0.2s; /* transition-all duration-200 */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+}
+
+.back-btn:hover {
+  background-color: #e5e7eb; /* hover:bg-gray-200 */
+}
+
+.new-test-btn {
+  background-color: orange; /* bg-green-600 */
+  color: white;
+   border-color: transparent;
+  padding: 0.75rem 1.5rem; /* px-6 py-3 */
+  border-radius: 0.5rem; /* rounded-lg */
+  font-weight: 600; /* font-semibold */
+  transition: all 0.2s; /* transition-all duration-200 */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+}
+
+.new-test-btn:hover {
+  background-color: #15803d; /* hover:bg-green-700 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* hover:shadow-md */
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  #link-container {
+  .success-card {
+    padding: 1.5rem;
+  }
+  
+  .link-input-group {
     flex-direction: column;
   }
   
-  #test-link-input {
+  .link-input,
+  .copy-btn {
     width: 100%;
   }
   
-  #copy-link-btn {
+  .step3-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  
+  .new-test-btn {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .step3-title {
+    font-size: 1.25rem;
+  }
+  
+  .success-heading {
+    font-size: 1.125rem;
+  }
+  
+  .success-card {
+    padding: 1rem;
   }
 }

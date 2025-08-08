@@ -1,50 +1,79 @@
-import React, { useState } from 'react';
-import { CheckCircle, XCircle, Clock, Award, BookOpen, Percent, Clock as TimeIcon } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { CheckCircle, XCircle, Clock, Award, BookOpen, Percent, Clock as TimeIcon, User, Play, X, Video, ArrowBigLeft } from 'lucide-react';
 import './TestResults.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import LoadingState from '../../components/States/LoadingState';
 
 const TestResultsPage = () => {
-  // Dummy data for test results
-  const [results] = useState({
-    score: 85.5,
-    passed: true,
-    correctCount: 17,
-    incorrectCount: 3,
-    totalQuestions: 20,
-    passingScore: 70,
-    testName: 'JavaScript Fundamentals',
-    completionDate: new Date().toLocaleDateString(),
-    timeTaken: '12:45',
-    questionDetails: [
-      {
-        questionText: 'What is the correct way to declare a variable in JavaScript?',
-        options: ['var x = 5;', 'variable x = 5;', 'x := 5;', 'int x = 5;'],
-        correctAnswer: 'var x = 5;',
-        selectedAnswer: 'var x = 5;',
-        isCorrect: true
-      },
-      {
-        questionText: 'Which method adds new items to the end of an array?',
-        options: ['push()', 'pop()', 'shift()', 'unshift()'],
-        correctAnswer: 'push()',
-        selectedAnswer: 'pop()',
-        isCorrect: false
-      },
-      {
-        questionText: 'What does the "=== " operator check for?',
-        options: ['Value equality', 'Type equality', 'Both value and type equality', 'Assignment'],
-        correctAnswer: 'Both value and type equality',
-        selectedAnswer: 'Both value and type equality',
-        isCorrect: true
-      },
-      {
-        questionText: 'Which of these is NOT a JavaScript data type?',
-        options: ['String', 'Boolean', 'Number', 'Float'],
-        correctAnswer: 'Float',
-        selectedAnswer: 'Float',
-        isCorrect: true
+  const params = useParams();
+  const [results, setResults] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const navigate=useNavigate()
+
+  const fetchAttempt = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_API}/api/admin/attemptByInvite/${params.inviteId}`, {
+        method: 'GET',
+      });
+
+      const data = await response.json();
+      console.log("Fetched results:", data);
+
+      if (response.ok) {
+        setResults(data);
+      } else {
+        setError(data.FailureMessage || 'No attempt found');
       }
-    ]
-  });
+    } catch (error) {
+      setError(error.message || 'Failed to fetch attempt');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAttempt();
+  }, []);
+
+  const openVideoModal = () => {
+    setIsVideoModalOpen(true);
+  };
+
+  const closeVideoModal = () => {
+    setIsVideoModalOpen(false);
+  };
+
+  // Close modal on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeVideoModal();
+      }
+    };
+
+    if (isVideoModalOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isVideoModalOpen]);
+  
+  const onBack=()=>{
+    navigate('/all-tests')
+
+  }
+
+  if (loading) return <LoadingState text={'Loading test result..'}/>;
+  if (error) return <div style={{ color: 'red' }}>{error}</div>;
+  if (!results) return null;
 
   return (
     <div id="results-page-container">
@@ -54,6 +83,10 @@ const TestResultsPage = () => {
           <p id="results-page-description">Detailed performance report for your attempt</p>
         </div>
         <div id="results-page-meta">
+          <div id="results-user-email">
+            <User size={16} />
+            {results.userEmail}
+          </div>
           <div id="results-completion-date">
             <Clock size={16} />
             Completed on: {results.completionDate}
@@ -64,7 +97,7 @@ const TestResultsPage = () => {
       <div id="results-page-content">
         <div id="results-summary-panel">
           <div id={`results-score-card-${results.passed ? 'passed' : 'failed'}`}>
-            <div id="results-score-value">{results.score.toFixed(1)}%</div>
+            <div id="results-score-value">{results.score}%</div>
             <div id="results-score-label">Overall Score</div>
             <div id="results-score-status">
               {results.passed ? (
@@ -112,18 +145,29 @@ const TestResultsPage = () => {
               <div className="results-stat-label">Time Taken</div>
             </div>
           </div>
+
+          {/* Video Recording Section */}
+          {results.videoUrl && (
+            <div id="results-video-section">
+              <h3 id="results-video-title">Test Recording</h3>
+              <button id="results-video-btn" onClick={openVideoModal}>
+                <Play size={18} />
+                Watch Recording
+              </button>
+            </div>
+          )}
         </div>
 
         <div id="results-details-panel">
           <h2 id="results-breakdown-title" className="results-section-title">
             <TimeIcon size={20} /> Question Breakdown
           </h2>
-          
+
           <div id="results-questions-list">
             {results.questionDetails.map((question, index) => (
-              <div 
-                key={index} 
-                id={`results-question-${index}`} 
+              <div
+                key={index}
+                id={`results-question-${index}`}
                 className={`results-question ${question.isCorrect ? 'correct' : 'incorrect'}`}
               >
                 <div className="results-question-meta">
@@ -140,9 +184,9 @@ const TestResultsPage = () => {
                 <div className="results-question-text">{question.questionText}</div>
                 <div className="results-answer-comparison">
                   <div className="results-answer-section">
-                    <span className="results-answer-label">Your answer:</span>
+                    <span className="results-answer-label">Candidate answer:</span>
                     <span className={`results-selected-answer ${!question.isCorrect ? 'wrong' : ''}`}>
-                      {question.selectedAnswer}
+                      {question.selectedAnswer || <i>Not answered</i>}
                     </span>
                   </div>
                   {!question.isCorrect && (
@@ -161,10 +205,42 @@ const TestResultsPage = () => {
       </div>
 
       <div id="results-actions-panel">
-        <button id="results-review-btn" className="results-action-btn primary">
-          <BookOpen size={18} /> Review Answers
+        <button onClick={onBack} id="results-review-btn" className="results-action-btn primary">
+          <ArrowBigLeft size={18} /> Go Back
         </button>
       </div>
+
+      {/* Video Modal */}
+      {isVideoModalOpen && results.videoUrl && (
+        <div id="results-video-modal-overlay" onClick={closeVideoModal}>
+          <div id="results-video-modal" onClick={(e) => e.stopPropagation()}>
+            <div id="results-video-modal-header">
+              <h3 id="results-video-modal-title">
+                <Video size={20} />
+                Test Recording - {results.testName}
+              </h3>
+              <button id="results-video-modal-close" onClick={closeVideoModal}>
+                <X size={20} />
+              </button>
+            </div>
+            <div id="results-video-modal-content">
+              <video 
+                id="results-video-player"
+                controls
+                autoPlay
+                src={results.videoUrl}
+              >
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            <div id="results-video-modal-footer">
+              <p id="results-video-modal-info">
+                Recording from test attempt completed on {results.completionDate}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

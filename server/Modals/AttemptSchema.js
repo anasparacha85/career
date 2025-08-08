@@ -4,27 +4,27 @@ const AttemptSchema = new mongoose.Schema({
   test: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Test',
+  },
+  invitation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Invitation',
     required: true
   },
   userEmail: {
     type: String,
     required: true
   },
- 
   answers: [
     {
       question: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Question',
-        required: true
       },
       selectedAnswer: {
         type: String,
-        required: true
       },
       isCorrect: {
         type: Boolean,
-        required: true
       }
     }
   ],
@@ -39,8 +39,12 @@ const AttemptSchema = new mongoose.Schema({
   submittedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  videoUrl: {
+  type: String,
+  default: null
+}
 });
 
-const Attempt =new mongoose.model('Attempt', AttemptSchema);
+const Attempt = mongoose.model('Attempt', AttemptSchema);
 module.exports = Attempt;

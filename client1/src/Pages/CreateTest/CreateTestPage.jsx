@@ -30,41 +30,45 @@ const CreateTest = () => {
   };
 
   return (
-    <div id="create-test-container" className={`${step === 3 ? 'generate-link-view' : ''}`}>
-      <div id="test-header">
-        <div id="test-info">
-          <h1>Create New Test</h1>
-          <p>Build your assessment by following these simple steps</p>
+    <div className="create-test-container">
+      <div className="create-test-wrapper">
+        {/* Header */}
+        <div className="create-test-header">
+          <div className="create-test-header-content">
+            <h1 className="create-test-title">Create New Test</h1>
+            <p className="create-test-subtitle">Build your assessment by following these simple steps</p>
+          </div>
         </div>
-      </div>
 
-      <ProgressBar step={step} />
-     
-      <div id="test-content">
-        {step === 1 && (
-          <Step1Details
-            testDetails={testDetails}
-            setTestDetails={setTestDetails}
-            nextStep={nextStep}
-          />
-        )}
+        {/* Progress Bar */}
+        <ProgressBar step={step} />
+        
+        {/* Content */}
+        <div className="create-test-content">
+          {step === 1 && (
+            <Step1Details
+              testDetails={testDetails}
+              setTestDetails={setTestDetails}
+              nextStep={nextStep}
+            />
+          )}
 
-        {step === 2 && (
-          <Step2Questions
-            testDetails={testDetails}
-            setTestDetails={setTestDetails}
-            Save={onSave}
-            prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        )}
+          {step === 2 && (
+            <Step2Questions
+              testDetails={testDetails}
+              setTestDetails={setTestDetails}
+              prevStep={prevStep}
+              nextStep={nextStep}
+            />
+          )}
 
-        {step === 3 && (
-          <Step3GenerateLink
-            onBack={prevStep}
-            onReset={resetForm}
-          />
-        )}
+          {step === 3 && (
+            <Step3GenerateLink
+              onBack={prevStep}
+              onReset={resetForm}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,66 +1,106 @@
-import React, { useState } from 'react';
-import './AddQuestionModal.css';
+import { useState } from "react";
+import './AddQuestionModal.css'; // Import the CSS file
 
 const AddQuestionModal = ({ isOpen, onClose, onSave }) => {
-  const [question, setQuestion] = useState('');
-  const [options, setOptions] = useState(['', '', '', '']);
-  const [correct, setCorrect] = useState('');
+    const [question, setQuestion] = useState('');
+    const [options, setOptions] = useState(['', '', '', '']);
+    const [correct, setCorrect] = useState('');
 
-  const handleOptionChange = (index, value) => {
-    const updated = [...options];
-    updated[index] = value;
-    setOptions(updated);
-  };
+    const handleSave = () => {
+      if (!question.trim() || options.some(opt => !opt.trim()) || !correct.trim()) {
+        alert('Please fill in all fields');
+        return;
+      }
 
- const handleSubmit = () => {
-  const correctIndex = parseInt(correct) - 1;
+      onSave({
+        question,
+        options,
+        correct
+      });
 
-  if (
-    !question ||
-    options.some(opt => !opt) ||
-    isNaN(correctIndex) ||
-    correctIndex < 0 ||
-    correctIndex > 3
-  ) {
-    alert('Please fill all fields correctly.');
-    return;
-  }
+      // Reset form
+      setQuestion('');
+      setOptions(['', '', '', '']);
+      setCorrect('');
+      onClose();
+    };
 
-  const correctAnswerText = options[correctIndex];
+    if (!isOpen) return null;
 
-  onSave({ question, options, correctAnswer: correctAnswerText }); // ✅ save correct answer as text
-  onClose();
+    return (
+      <div className="add-question-modal">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h3>Add New Question</h3>
+          </div>
+          
+          <div className="modal-body">
+            <div>
+              <label className="form-label">
+                Question *
+              </label>
+              <textarea
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                placeholder="Enter your question here..."
+                rows={3}
+                className="form-textarea"
+              />
+            </div>
 
-  // Reset modal inputs
-  setQuestion('');
-  setOptions(['', '', '', '']);
-  setCorrect('');
-};
+            <div>
+              <label className="form-label">
+                Answer Options *
+              </label>
+              <div className="options-container">
+                {options.map((option, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    value={option}
+                    onChange={(e) => {
+                      const newOptions = [...options];
+                      newOptions[index] = e.target.value;
+                      setOptions(newOptions);
+                    }}
+                    placeholder={`Option ${index + 1}`}
+                    className="form-input"
+                  />
+                ))}
+              </div>
+            </div>
 
+            <div>
+              <label className="form-label">
+                Correct Answer *
+              </label>
+              <input
+                type="text"
+                value={correct}
+                onChange={(e) => setCorrect(e.target.value)}
+                placeholder="Enter the correct answer"
+                className="form-input"
+              />
+            </div>
+          </div>
 
-  if (!isOpen) return null;
-
-  return (
-    <div className="modal-backdrop">
-      <div className="modal-box">
-        <h3>Add New Question</h3>
-        <input placeholder="Question" value={question} onChange={e => setQuestion(e.target.value)} />
-        {options.map((opt, idx) => (
-          <input key={idx} placeholder={`Option ${idx + 1}`} value={opt}
-            onChange={e => handleOptionChange(idx, e.target.value)} />
-        ))}
-        <input
-          placeholder="Correct Option (1-4)"
-          value={correct}
-          onChange={e => setCorrect(e.target.value)}
-        />
-        <div className="modal-actions">
-          <button onClick={handleSubmit}>Save</button>
-          <button className="cancel" onClick={onClose}>Cancel</button>
+          <div className="modal-footer">
+            <button
+              onClick={onClose}
+              className="btn btn-cancel"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              className="btn btn-primary"
+            >
+              Add Question
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default AddQuestionModal;
