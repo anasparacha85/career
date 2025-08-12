@@ -31,9 +31,9 @@ const Test = require("../Modals/TestModal");
     });
 
     await newTest.save();
-    const testLink = `http://localhost:5173/test-link/${newTest._id}`;
+    // const testLink = `http://localhost:5173/test-link/${newTest._id}`;
 
-    res.status(201).json({ SuccessMessage:"Test Created Successfully", test: newTest ,testLink:testLink});
+    res.status(201).json({ SuccessMessage:"Test Created Successfully", test: newTest });
   } catch (error) {
     console.error("Error creating test:", error);
     res.status(500).json({ success: false, error: error.message });
@@ -66,9 +66,10 @@ const getTestByToken = async (req, res) => {
         res.status(500).json({ FailureMessage: "Internal Server Error" });
     }
 };
-
+// for admin and HR purpose
 const getAllTest=async(req,res)=>{
   try {
+    
     const TestData=await Test.find();
     if(TestData.length<=0){
       return res.status(400).json({FailureMessage:"No Tests Found"})

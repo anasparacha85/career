@@ -19,6 +19,7 @@ const TestPage = () => {
   const [Error, setError] = useState(null);
   const { testData, setTestData, attemptedData, setAttemptedData } = CandidateStore();
   const navigate = useNavigate();
+  const [count, setcount] = useState(0)
   const {webcamStream,setWebcamStream,recordedChunks,mediaRecorderRef,screenStream,setScreenStream,InvitationStatus,setInvitationStatus}=CandidateStore()
    const fetchInviteStatus=async()=>{
       try {
@@ -251,8 +252,12 @@ if(InvitationStatus==='completed'){
     setCurrentQuestionIndex(index);
   };
   // submitting the test
+  var increasecount;
   const handleSubmitTest = async () => {
      setSubmitLoading(true)
+     increasecount=setInterval(() => {
+      setcount((prev)=>prev+1)
+     }, 1000);
   try {
    
     // Stop recording if it's active
@@ -327,6 +332,7 @@ if(InvitationStatus==='completed'){
   }
   finally{
     setSubmitLoading(false)
+    clearInterval(increasecount)
   }
 };
 
@@ -433,7 +439,7 @@ if(InvitationStatus==='completed'){
             <div style={{ display: 'flex', gap: '12px' }}>
               {currentQuestionIndex === totalQuestions - 1 ? (
                 <button className="submit-btn" onClick={handleSubmitTest}>
-                 {SubmitLoading?'loading...':'Submit Test'} 
+                 {SubmitLoading?`${count} loading...`:'Submit Test'} 
                 </button>
               ) : (
                 <button className="nav-btn" onClick={handleNextQuestion}>

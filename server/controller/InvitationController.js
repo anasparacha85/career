@@ -143,23 +143,23 @@ const getAllAttempts = async (req, res) => {
   }
 
 }
-const deleteAllAttempts = async (req, res) => {
-  try {
-    const attempts = await Attempt.find();
+// const deleteAllAttempts = async (req, res) => {
+//   try {
+//     const attempts = await Attempt.find();
     
-    // Use Promise.all to handle multiple async deletions
-    await Promise.all(
-      attempts.map((value) =>
-        Attempt.deleteOne({ _id: value._id })
-      )
-    );
+//     // Use Promise.all to handle multiple async deletions
+//     await Promise.all(
+//       attempts.map((value) =>
+//         Attempt.deleteOne({ _id: value._id })
+//       )
+//     );
 
-    res.status(200).json({ message: 'Deleted successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+//     res.status(200).json({ message: 'Deleted successfully' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
 
 const getInvitationStatus=async(req,res)=>{
   try {

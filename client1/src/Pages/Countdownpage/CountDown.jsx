@@ -186,7 +186,10 @@ if (InvitationStatus === 'completed') {
           !showCountdown ? (
             <div className="start-card">
               <h1 className="start-title">Ready to Begin Your Test?</h1>
+                <p className="start-desc">During the test please make sure that you do not close the tab and <br/>  must not reload the window other wise you test will be AutoSubmitted</p>
+
               <p className="start-desc">Please make sure you are in a quiet place with no distractions.</p>
+                  
               <button className="start-btn" onClick={startCountdown}>
                 Start Test
               </button>

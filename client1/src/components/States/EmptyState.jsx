@@ -1,7 +1,7 @@
 import { Users } from 'lucide-react'
 import React from 'react'
 
-const EmptyState = () => {
+const EmptyState = ({message,description}) => {
   return (
    <div className="empty-state">
               <div className="empty-state-icon">

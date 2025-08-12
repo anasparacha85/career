@@ -367,8 +367,8 @@
 
 /* Enhanced options list */
 .step2-options-list {
-  display: grid;
- grid-template-columns: 1fr 1fr 1fr 1fr;
+  display: flex;
+flex-direction: column;
   gap: 0.5rem;
 }
 
@@ -467,6 +467,176 @@
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
+}
+/* Add these classes to your existing Step2.css file */
+
+/* Template preview tags in action card */
+.step2-template-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.step2-template-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.step2-template-more {
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Enhanced summary stat colors */
+.step2-custom-color {
+  color: #059669 !important;
+}
+
+.step2-template-color {
+  color: #3b82f6 !important;
+}
+
+.step2-duration-color {
+  color: #7c3aed !important;
+}
+
+/* Category summary section */
+.step2-category-summary {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.step2-category-header {
+  margin-bottom: 0.75rem;
+}
+
+.step2-category-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.step2-category-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.step2-category-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.step2-category-name {
+  text-transform: capitalize;
+}
+
+.step2-category-count {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  min-width: 1.25rem;
+  text-align: center;
+}
+
+/* Difficulty badges */
+.step2-difficulty-badge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.step2-difficulty-beginner {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.step2-difficulty-intermediate {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.step2-difficulty-advanced {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Enhanced question category badge with icon */
+.step2-question-category-badge {
+  background-color: #f3f4f6;
+  color: #374151;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Responsive adjustments for new elements */
+@media (max-width: 768px) {
+  .step2-template-preview {
+    justify-content: center;
+    margin-top: 0.75rem;
+  }
+  
+  .step2-category-tags {
+    justify-content: center;
+  }
+  
+  .step2-template-tag {
+    font-size: 0.625rem;
+  }
+  
+  .step2-category-tag {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .step2-template-preview {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  
+  .step2-category-summary {
+    text-align: center;
+  }
+  
+  .step2-question-meta {
+    justify-content: center;
+  }
 }
 
 /* Responsive adjustments */

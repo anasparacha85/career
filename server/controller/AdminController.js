@@ -15,6 +15,22 @@ const getAllInvites=async(req,res)=>{
 
   }
 }
+// for admin and HR purpose
+const getAllTest=async(req,res)=>{
+  try {
+    const userId=req.user._id
+    const TestData=await Test.find({_id:userId});
+    if(TestData.length<=0){
+      return res.status(400).json({FailureMessage:"No Tests Found"})
+    }
+    res.status(200).json(TestData);
+  } catch (error) {
+    console.log(error);
+    
+    res.status(500).json({FailureMessage:"Internal Server error"})
+    
+  }
+}
 
 
 const getAttemptsByInvitationId = async (req, res) => {

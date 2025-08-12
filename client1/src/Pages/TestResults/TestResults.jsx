@@ -97,7 +97,7 @@ const TestResultsPage = () => {
       <div id="results-page-content">
         <div id="results-summary-panel">
           <div id={`results-score-card-${results.passed ? 'passed' : 'failed'}`}>
-            <div id="results-score-value">{results.score}%</div>
+            <div id="results-score-value">{Math.floor(results.score)}%</div>
             <div id="results-score-label">Overall Score</div>
             <div id="results-score-status">
               {results.passed ? (
