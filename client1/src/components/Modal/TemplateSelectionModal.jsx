@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
-import { X, ChevronDown, ChevronUp, Check } from 'lucide-react';
+import { X, ChevronDown, ChevronUp, Check, BookOpen, Eye, Plus } from 'lucide-react';
 import './TemplateSelectionModal.css';
 import PreDefinedQuestions from '../QuestionsData/PreDefinedQuestions';
 import PredefinedQuestionsModal from './QuestionsByTemplateModal';
 import QuestionsByTemplateModal from './QuestionsByTemplateModal';
 
 const TemplateSelectionModal = ({ isOpen, onClose, onSelectQuestions }) => {
-  const [expandedCategory, setExpandedCategory] = React.useState(null);
-  const [selectedQuestions, setSelectedQuestions] = React.useState([]);
-const [TemplateQuestionsModal, setTemplateQuestionsModal] = useState(false)
-  const templates = PreDefinedQuestions()
+  const [expandedCategory, setExpandedCategory] = useState(null);
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [templateQuestionsModal, setTemplateQuestionsModal] = useState(false);
 
-  const toggleCategory = (category) => {
-    setExpandedCategory(expandedCategory === category ? null : category);
-    setTemplateQuestionsModal(true)
-  };
+  const templates = PreDefinedQuestions();
 
   const toggleQuestionSelection = (question) => {
     setSelectedQuestions(prev => 
@@ -46,82 +42,127 @@ const [TemplateQuestionsModal, setTemplateQuestionsModal] = useState(false)
     onClose();
   };
 
+  const handleViewQuestions = (template) => {
+    setExpandedCategory(template.category);
+    setTemplateQuestionsModal(true);
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="template-modal-overlay">
-      <div className="template-modal-container">
-        <div className="template-modal-header">
-          <h2 className="template-modal-title">Professional Question Templates</h2>
-          <p className="template-modal-subtitle">Select from our expertly curated question sets</p>
-          <button className="template-modal-close" onClick={onClose}>
-            <X size={24} />
+    <div className="modal-overlay">
+      <div className="modal-container">
+        {/* Header */}
+        <div className="modal-header">
+          <div className="header-content">
+            <div className="header-icon">
+              <BookOpen size={24} />
+            </div>
+            <div className="header-text">
+              <h2 className="modal-title">Question Templates</h2>
+              <p className="modal-subtitle">Choose from professionally curated question sets</p>
+            </div>
+          </div>
+          <button className="close-button" onClick={onClose}>
+            <X size={20} />
           </button>
         </div>
 
-       <div className="template-modal-content">
-  <div className="template-grid">
-    {templates.map((template) => {
-      const allSelected = template.questions.every(q =>
-        selectedQuestions.some(sq => sq.id === q.id)
-      );
+        {/* Content */}
+        <div className="modal-content">
+          <div className="templates-grid">
+            {templates.map((template) => {
+              const allSelected = template.questions.every(q =>
+                selectedQuestions.some(sq => sq.id === q.id)
+              );
+              const someSelected = template.questions.some(q =>
+                selectedQuestions.some(sq => sq.id === q.id)
+              );
 
-      return (
-        <>
-        <div key={template.category} className="template-card">
-          <div className="template-card-icon">{template.icon}</div>
-          <h3 className="template-card-title">{template.title}</h3>
-          <p className="template-card-description">{template.description}</p>
+              return (
+                <div key={template.category} className="template-card">
+                  <div className="card-header">
+                    <div className="card-icon">{template.icon}</div>
+                    <div className="card-badge">
+                      {template.questions.length} questions
+                    </div>
+                  </div>
+                  
+                  <div className="card-body">
+                    <h3 className="card-title">{template.title}</h3>
+                    <p className="card-description">{template.description}</p>
+                  </div>
 
-          <div className="template-card-actions">
-            <button
-              className="template-btn view-btn"
-              onClick={() => {
-                setExpandedCategory(template.category);
-                setTemplateQuestionsModal(true);
-              }}
-            >
-              View Questions
-            </button>
+                  <div className="card-footer">
+                    <button 
+                      className="action-btn secondary"
+                      onClick={() => handleViewQuestions(template)}
+                    >
+                      <Eye size={16} />
+                      Preview
+                    </button>
+                    
+                    <button
+                      className={`action-btn ${allSelected ? 'remove' : 'primary'} ${someSelected && !allSelected ? 'partial' : ''}`}
+                      onClick={() => handleSelectAllInCategory(template.questions)}
+                    >
+                      {allSelected ? (
+                        <>
+                          <X size={16} />
+                          Remove All
+                        </>
+                      ) : (
+                        <>
+                          <Plus size={16} />
+                          {someSelected ? 'Select Remaining' : 'Select All'}
+                        </>
+                      )}
+                    </button>
+                  </div>
 
-            <button
-              className={`template-btn select-btn ${allSelected ? "selected" : ""}`}
-              onClick={() => handleSelectAllInCategory(template.questions)}
-            >
-              {allSelected ? "Remove Entire Template" : "Select Entire Template"}
-            </button>
+                  {/* Selection indicator */}
+                  {someSelected && (
+                    <div className="selection-indicator">
+                      <div className="selection-bar" style={{
+                        width: `${(selectedQuestions.filter(q => template.questions.some(tq => tq.id === q.id)).length / template.questions.length) * 100}%`
+                      }}></div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-
-          
         </div>
-       {expandedCategory === template.category && (
-    <QuestionsByTemplateModal
-        isOpen={TemplateQuestionsModal}
-        onClose={() => setTemplateQuestionsModal(false)}
-        predefinedQuestions={template.questions}
-        selectedQuestions={selectedQuestions} // send current selection
-        onToggleQuestion={toggleQuestionSelection} // send toggle function
-    />
-)}
-        </>
-      );
-    })}
-  </div>
-</div>
 
-        <div className="template-modal-footer">
-          <div className="template-selection-count">
-            {selectedQuestions.length} questions selected
+        {/* Footer */}
+        <div className="modal-footer">
+          <div className="selection-summary">
+            <div className="selection-count">
+              <Check size={16} />
+              {selectedQuestions.length} questions selected
+            </div>
+            {selectedQuestions.length > 0 && (
+              <div className="selection-breakdown">
+                {templates.map(template => {
+                  const count = selectedQuestions.filter(q => 
+                    template.questions.some(tq => tq.id === q.id)
+                  ).length;
+                  return count > 0 ? (
+                    <span key={template.category} className="breakdown-item">
+                      {template.title}: {count}
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            )}
           </div>
-          <div className="template-modal-actions">
-            <button 
-              className="template-modal-cancel"
-              onClick={onClose}
-            >
+          
+          <div className="footer-actions">
+            <button className="footer-btn secondary" onClick={onClose}>
               Cancel
             </button>
             <button 
-              className="template-modal-submit"
+              className="footer-btn primary"
               onClick={handleSubmit}
               disabled={selectedQuestions.length === 0}
             >
@@ -130,6 +171,19 @@ const [TemplateQuestionsModal, setTemplateQuestionsModal] = useState(false)
           </div>
         </div>
       </div>
+
+      {/* Questions Modal */}
+      {expandedCategory && (
+        <QuestionsByTemplateModal
+          isOpen={templateQuestionsModal}
+          onClose={() => setTemplateQuestionsModal(false)}
+          predefinedQuestions={templates.find(t => t.category === expandedCategory)?.questions || []}
+          selectedQuestions={selectedQuestions}
+          onToggleQuestion={toggleQuestionSelection}
+        />
+      )}
+
+     
     </div>
   );
 };
