@@ -82,6 +82,8 @@ const TestCandidates = () => {
 
       const res = await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_API}/api/admin/getInvite/${params.testid}`);
       const data = await res.json();
+      console.log(data);
+      
       if (res.ok) {
         setCandidates(data);
       }
@@ -407,6 +409,8 @@ const TestCandidates = () => {
                       <th>Completed</th>
                      
                       <th>Details</th>
+                      <th>Test Link</th>
+                      
                     </tr>
                   </thead>
                   <tbody className="table-body">
@@ -446,6 +450,15 @@ const TestCandidates = () => {
                           >
                             {candidate.status === 'completed' ? 'View Details' : 'No Details Found'}
                             {candidate.status==='completed'?<Eye size={16}/>:<EyeOff size={16}/>}
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            // onClick={() => GotoAttempt(candidate._id)}
+                            // disabled={candidate.status === 'pending'}
+                            className={`status-button ${candidate.status === 'completed' ? 'completed' : 'pending'}`}
+                          >
+                           
                           </button>
                         </td>
                       </tr>

@@ -6,6 +6,88 @@ const { v4: uuidv4 } = require('uuid');
 const Question = require('../Modals/QuestionModal');
 const cloudinary = require('../config/CloudinaryConfig');
 
+const sendInvitation = async (req, res) => {
+  try {
+    const { email, name, position, testId } = req.body;
+
+    const test = await Test.findOne({ _id: testId });
+    if (!test) {
+      return res.status(404).json({ FailureMessage: 'Test not found' });
+    }
+
+    const token = uuidv4(); // unique token
+     const testLink = `http://localhost:5173/test-link/${token}`;
+
+    const newInvitation = new Invitation({
+      email,
+      name,
+      position,
+      test: testId,
+      token,
+      testLink
+    });
+
+    await newInvitation.save();
+
+   
+
+    // (Optional) Send this link via email
+
+    res.status(201).json({
+      SuccessMessage: 'Invitation sent successfully',
+      invitation: newInvitation,
+      testLink,
+    });
+  } catch (error) {
+    console.error('Error sending invitation:', error);
+    res.status(500).json({ FailureMessage: 'Internal Server Error' });
+  }
+};
+
+const sendBulkInvitations = async (req, res) => {
+  try {
+    const { candidates, testId } = req.body;
+
+    const test = await Test.findById(testId);
+    if (!test) {
+      return res.status(404).json({ FailureMessage: 'Test not found' });
+    }
+
+    // sab ke liye token aur invitation banao
+    const invitations = await Promise.all(
+      candidates.map(async (candidate) => {
+        const token = uuidv4();
+        const testLink=`http://localhost:5173/test-link/${token}`
+        const newInvitation = new Invitation({
+          email: candidate.email,
+          name: candidate.name,
+          position: candidate.position,
+          test: testId,
+          token,
+          testLink
+        });
+        await newInvitation.save();
+
+        return {
+          ...newInvitation.toObject(),
+          testLink:testLink ,
+        };
+      })
+    );
+    console.log(invitations);
+    
+
+    res.status(201).json({
+      SuccessMessage: 'Bulk invitations sent successfully',
+      invitations,
+    });
+  } catch (error) {
+    console.error('Error sending bulk invitations:', error);
+    res.status(500).json({ FailureMessage: 'Internal Server Error' });
+  }
+};
+
+
 // Save individual question answer
 const saveQuestion = async (req, res) => {
   try {
@@ -337,83 +419,6 @@ const mergeVideos = async (videoUrls, token) => {
 // };
 
 
-
-const sendInvitation = async (req, res) => {
-  try {
-    const { email, name, position, testId } = req.body;
-
-    const test = await Test.findOne({ _id: testId });
-    if (!test) {
-      return res.status(404).json({ FailureMessage: 'Test not found' });
-    }
-
-    const token = uuidv4(); // unique token
-
-    const newInvitation = new Invitation({
-      email,
-      name,
-      position,
-      test: testId,
-      token,
-    });
-
-    await newInvitation.save();
-
-    const testLink = `http://localhost:5173/test-link/${token}`;
-
-    // (Optional) Send this link via email
-
-    res.status(201).json({
-      SuccessMessage: 'Invitation sent successfully',
-      invitation: newInvitation,
-      testLink,
-    });
-  } catch (error) {
-    console.error('Error sending invitation:', error);
-    res.status(500).json({ FailureMessage: 'Internal Server Error' });
-  }
-};
-
-const sendBulkInvitations = async (req, res) => {
-  try {
-    const { candidates, testId } = req.body;
-
-    const test = await Test.findById(testId);
-    if (!test) {
-      return res.status(404).json({ FailureMessage: 'Test not found' });
-    }
-
-    // sab ke liye token aur invitation banao
-    const invitations = await Promise.all(
-      candidates.map(async (candidate) => {
-        const token = uuidv4();
-        const newInvitation = new Invitation({
-          email: candidate.email,
-          name: candidate.name,
-          position: candidate.position,
-          test: testId,
-          token,
-        });
-        await newInvitation.save();
-
-        return {
-          ...newInvitation.toObject(),
-          testLink: `http://localhost:5173/test-link/${token}`,
-        };
-      })
-    );
-    console.log(invitations);
-    
-
-    res.status(201).json({
-      SuccessMessage: 'Bulk invitations sent successfully',
-      invitations,
-    });
-  } catch (error) {
-    console.error('Error sending bulk invitations:', error);
-    res.status(500).json({ FailureMessage: 'Internal Server Error' });
-  }
-};
 
 
 // const submitAttempt = async (req, res) => {

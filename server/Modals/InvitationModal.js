@@ -29,6 +29,10 @@ const invitationSchema = new mongoose.Schema({
     enum: ['pending', 'completed'],
     default: 'pending',
   },
+  testLink:{
+    type:String,
+    default:""
+  },
   invitedAt: {
     type: Date,
     default: Date.now,
