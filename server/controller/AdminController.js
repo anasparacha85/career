@@ -1,7 +1,8 @@
 const Attempt = require("../Modals/AttemptSchema")
 const Invitation = require("../Modals/InvitationModal")
+const Test = require("../Modals/TestModal")
 
-const getAllInvites=async(req,res)=>{
+const getInvitesByTestId=async(req,res)=>{
    try {
     const id=req.params.testid
     const invitations = await Invitation.find({test:id})
@@ -48,19 +49,28 @@ const getAttemptsByInvitationId = async (req, res) => {
     if (!attempt) {
       return res.status(403).json({ FailureMessage: "No Attempt found" });
     }
+    console.log(attempt);
+    
 
     const { score, passed, userEmail, videoUrl, test, answers, submittedAt } = attempt;
 
     const correctCount = answers.filter(ans => ans.isCorrect).length;
-    const incorrectCount = answers.length - correctCount;
+    const incorrectCount = null;
     const totalQuestions = answers.length;
 
     const questionDetails = answers.map(ans => ({
       questionText: ans.question?.question || "Question deleted",
+      questionFile:ans.question.questionFile || "no file",
+      referenceFile:ans.question.answerFile || "no file",
       options: ans.question?.options || [],
       correctAnswer: ans.question?.correctAnswer || "",
       selectedAnswer: ans.selectedAnswer || "",
-      isCorrect: ans.isCorrect
+      isCorrect: ans.isCorrect,
+      AnswerFileUrl:ans.AnswerFileUrl || "",
+      AnswerVideoUrl:ans.AnswerVideoUrl || "",
+      questionType:ans.question.type || "",
+      questionImage:ans.question.image || "no image"
+
     }));
 
     const formattedAttempt = {
@@ -86,6 +96,24 @@ const getAttemptsByInvitationId = async (req, res) => {
   }
 };
 
+const getTestbyId=async(req,res)=>{
+  try {
+    const id=req.params.id;
+    if(!id){
+      res.status(403).json({FailureMessage:"Invalid test id"})
+    }
+    const testdata=await Test.findOne({_id:id}).populate('questions')
+    if(!testdata){
+      return res.status(400).json({FailureMessage:"Can't found test"})
+    }
+    res.status(200).json(testdata)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({FailureMessage:"Internal server error"})
+    
+  }
+
+}
 
 
-module.exports={getAllInvites,getAttemptsByInvitationId}
+module.exports={getInvitesByTestId,getAttemptsByInvitationId,getTestbyId}

@@ -3,25 +3,59 @@ const  Question  = require("../Modals/QuestionModal");
 const Test = require("../Modals/TestModal");
 
 
- const createTest = async (req, res) => {
+const createTest = async (req, res) => {
   try {
-    const { name, description, duration, passingScore, questions } = req.body;
-    if(!name || !description || !duration || !passingScore || !questions.length){
-        return res.status(400).json({FailureMessage:"please fill all the fields"})
+    // formData ke andar testData stringified aya tha
+    const testData = JSON.parse(req.body.testData);
+    let { name, description, duration, passingScore, questions } = testData;
+
+    if (!name || !description || !duration || !passingScore || !questions.length) {
+      return res.status(400).json({ FailureMessage: "please fill all the fields" });
     }
 
-    // Step 1: Save each question and collect its ID
+    // 🔹 step1: uploaded files ko map karo
+    const fileMap = {};
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(file => {
+        fileMap[`__UPLOAD__${file.fieldname}`] = file.path; // cloudinary url
+      });
+    }
+
+    // 🔹 step2: questions update karo
+    const processedQuestions = questions.map((q) => {
+      if (fileMap[q.questionFile]) {
+        q.questionFile = fileMap[q.questionFile];
+      }
+      if (fileMap[q.answerFile]) {
+        q.answerFile = fileMap[q.answerFile];
+      }
+      if (fileMap[q.image]) {
+        q.image = fileMap[q.image];
+      }
+      return q;
+    });
+
+    // 🔹 step3: pehle questions save karo
     const questionDocs = await Question.insertMany(
-      questions.map((q) => ({
+      processedQuestions.map((q) => ({
         question: q.question,
-        options: q.options,
+        options: q.options || [],
         correctAnswer: q.correct,
+        questionFile: q.questionFile || null,
+        answerFile: q.answerFile || null,
+        image: q.image || null,
+        category: q.category,
+        subcategory: q.subcategory,
+        part: q.part,
+        type: q.type,
+        answerType: q.answerType,
+        inputRequired:q.inputRequired || []
       }))
     );
 
-    const questionIds = questionDocs.map((q) => q._id); // ObjectIds for Test
+    const questionIds = questionDocs.map((q) => q._id);
 
-    // Step 2: Create and save the Test
+    // 🔹 step4: test create karo
     const newTest = new Test({
       name,
       description,
@@ -31,14 +65,14 @@ const Test = require("../Modals/TestModal");
     });
 
     await newTest.save();
-    // const testLink = `http://localhost:5173/test-link/${newTest._id}`;
 
-    res.status(201).json({ SuccessMessage:"Test Created Successfully", test: newTest });
+    res.status(201).json({ SuccessMessage: "Test Created Successfully", test: newTest });
   } catch (error) {
     console.error("Error creating test:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
 const getTestByToken = async (req, res) => {
     try {
         const token = req.params.token;

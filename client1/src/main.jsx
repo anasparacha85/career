@@ -12,23 +12,27 @@ import TestResultsPage from './Pages/TestResults/TestResults.jsx'
 import StartTestPage from './Pages/Countdownpage/CountDown.jsx'
 import AllInvites from './Pages/AllInvites/AllInvites.jsx'
 import TestCompletedPage from './Pages/TestCompletedPage/TestCompletepage.jsx'
+import SubcategoryPage from './Pages/SubCategoryTestsPage.jsx/SubcategoryPage.jsx'
+import QuestionSetPage from './Pages/QuestionSetPage/QuestionSetPage.jsx'
 
 const router=createBrowserRouter(createRoutesFromElements(
   <Route path='/' element={<App/>}>
-    <Route index element={<DashboardPage/>}/>
+   <Route index element={<AllTests/>} />
+       
+         <Route path='/all-invites/:testid' element={<AllInvites/>}/>
+    {/* <Route index element={<DashboardPage/>}/> */}
     <Route path='/create-test' element={<CreateTest/>} />
+    <Route path='/sub-category-page' element={<SubcategoryPage/>}/>
     <Route path='/test-link/:token' element={<StartTestPage/>}/>
     <Route path='/test-completed-status' element={<TestCompletedPage/>}/>
+     <Route path="/question-set" element={<QuestionSetPage />} />
+
   
     
    
 
      <Route path='/start-test/:token' element={<TestPage/>}/>
-        <Route path='/all-tests' >
-        <Route index element={<AllTests/>}/>
-            <Route path='all-invites/:testid' element={<AllInvites/>}/>
-             
-        </Route>
+       
         <Route path='/attempt/:inviteId' element={<TestResultsPage/>}/>
   </Route>
 ))

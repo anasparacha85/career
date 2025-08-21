@@ -124,6 +124,9 @@
 
 .completion-actions {
   margin-bottom: 24px;
+ 
+  display: flex;
+  justify-content: center;
 }
 
 .contact-support-btn {

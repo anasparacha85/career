@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Step1Details from './Components/Step1';
 import Step2Questions from './Components/Step2';
 import Step3GenerateLink from './Components/Step3';
 import ProgressBar from './Components/Progressbar';
 import './CreateTest.css';
-import { Save, ChevronLeft, ChevronRight } from 'lucide-react';
-import './Components/Buttons.css';
 
 const CreateTest = () => {
-  const [step, setStep] = useState(1);
-  const [testDetails, setTestDetails] = useState({
-    name: '',
-    description: '',
-    duration: '',
-    passingScore: '',
-    questions: []
+  const [step, setStep] = useState(() => {
+    return parseInt(localStorage.getItem("step")) || 1;
   });
+
+  const [testDetails, setTestDetails] = useState(() => {
+    const savedData = localStorage.getItem("testDetails");
+    return savedData
+      ? JSON.parse(savedData)
+      : { name: '', description: '', duration: '', passingScore: '', questions: [] };
+  });
+
+  // jab bhi step ya details change hon to localStorage mai save kardo
+  useEffect(() => {
+    localStorage.setItem("step", step);
+  }, [step]);
+
+  useEffect(() => {
+    localStorage.setItem("testDetails", JSON.stringify(testDetails));
+  }, [testDetails]);
 
   const onSave = (e) => {
     const { name, value } = e.target;
@@ -27,6 +36,8 @@ const CreateTest = () => {
   const resetForm = () => {
     setStep(1);
     setTestDetails({ name: '', description: '', duration: '', passingScore: '', questions: [] });
+    localStorage.removeItem("step");
+    localStorage.removeItem("testDetails");
   };
 
   return (
@@ -34,15 +45,15 @@ const CreateTest = () => {
       <div className="create-test-wrapper">
         {/* Header */}
         <div className="create-test-header">
-          <div className="create-test-header-content">
-            <h1 className="create-test-title">Create New Test</h1>
-            <p className="create-test-subtitle">Build your assessment by following these simple steps</p>
-          </div>
+          <h1 className="create-test-title">Create New Test</h1>
+          <p className="create-test-subtitle">
+            Build your assessment by following these simple steps
+          </p>
         </div>
 
         {/* Progress Bar */}
         <ProgressBar step={step} />
-        
+
         {/* Content */}
         <div className="create-test-content">
           {step === 1 && (

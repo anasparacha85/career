@@ -5,9 +5,8 @@
 }
 
 #all-tests-header {
-  background-color: white;
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+
+  
   padding: 2rem 0;
 }
 
@@ -52,6 +51,8 @@
   color: #64748b;
   width: 1.25rem;
   height: 1.25rem;
+  display: flex;
+  
 }
 
 #all-tests-search-input {
@@ -245,6 +246,26 @@
 .all-tests-button-icon {
   width: 1rem;
   height: 1rem;
+}
+.new-test-btn{
+  padding: 0.875rem 1rem;
+  background-color: orangered;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  
+
+}
+.new-test-btn:hover{
+  background-color: orange;
 }
 
 @media (max-width:830px) {

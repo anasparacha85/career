@@ -1,3 +1,4 @@
+// utils/upload.js
 const { v2: cloudinary } = require('cloudinary');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
@@ -9,41 +10,50 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Optimized storage configuration
+// Storage config
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: async (req, file) => ({
-    folder: 'test-recordings',
-    resource_type: 'video',
-    public_id: `${Date.now()}-${file.originalname.split('.')[0]}`,
-    // Optimization settings
-    transformation: [
-      {
-        video_codec: 'h264',
-        audio_codec: 'aac',
-        quality: 'auto:good', // Auto-optimize quality vs file size
-        format: 'mp4' // More compatible format
-      }
-    ],
-    // Upload settings for better performance
-    chunk_size: 6000000, // 6MB chunks for large files
-    timeout: 300000, // 5 minute timeout
-  }),
+  params: async (req, file) => {
+    let resourceType = "auto"; 
+    let format = null;
+
+    if (file.mimetype.startsWith("video/")) {
+      resourceType = "video";
+    } else if (file.mimetype.startsWith("image/")) {
+      resourceType = "image";
+    } else {
+      resourceType = "raw"; // pdf, docx, rvt etc.
+    }
+
+    // ✅ Format detect karke lagao
+    if (file.mimetype === "application/pdf") format = "pdf";
+    if (file.mimetype === "application/msword") format = "doc";
+    if (file.mimetype === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") format = "docx";
+
+    return {
+      folder: "test-files",
+      resource_type: resourceType,
+      format, // 👈 ye add karo
+      public_id: `${Date.now()}-${file.originalname.split('.')[0]}`,
+    };
+  },
 });
 
-// Enhanced upload configuration
-const upload = multer({ 
+const upload = multer({
   storage,
-  limits: {
-    fileSize: 100 * 1024 * 1024, // 100MB limit
-  },
+  limits: { fileSize: 800 * 1024 * 1024 }, // 200MB
   fileFilter: (req, file, cb) => {
-    // Accept video files only
-    if (file.mimetype.startsWith('video/')) {
+    const allowed = ["video/", "image/", "application/pdf", 
+                     "application/msword", 
+                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                     "application/octet-stream"]; // RVT etc.
+
+    if (allowed.some(type => file.mimetype.startsWith(type) || file.mimetype === type)) {
       cb(null, true);
     } else {
-      cb(new Error('Only video files are allowed'), false);
+      cb(new Error("Only video, image, pdf, doc, docx, rvt files allowed"), false);
     }
-  }
+  },
 });
-module.exports=upload
+
+module.exports = upload;

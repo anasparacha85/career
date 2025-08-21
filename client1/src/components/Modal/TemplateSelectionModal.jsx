@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { X, ChevronDown, ChevronUp, Check, BookOpen, Eye, Plus } from 'lucide-react';
+import { X, BookOpen, Eye, Plus, Check } from 'lucide-react';
 import './TemplateSelectionModal.css';
-import PreDefinedQuestions from '../QuestionsData/PreDefinedQuestions';
-import PredefinedQuestionsModal from './QuestionsByTemplateModal';
-import QuestionsByTemplateModal from './QuestionsByTemplateModal';
+import PreDefinedQuestions from '../../CustomData/QuestionsData/PreDefinedQuestions';
+import SubcategoryModal from './SubcategoryModal';
+import QuestionSetModal from './QuestionSetModal';
 
 const TemplateSelectionModal = ({ isOpen, onClose, onSelectQuestions }) => {
-  const [expandedCategory, setExpandedCategory] = useState(null);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
-  const [templateQuestionsModal, setTemplateQuestionsModal] = useState(false);
+  const [viewingTemplate, setViewingTemplate] = useState(null);
+  const [viewingSubcategory, setViewingSubcategory] = useState(null);
 
   const templates = PreDefinedQuestions();
 
@@ -37,19 +37,49 @@ const TemplateSelectionModal = ({ isOpen, onClose, onSelectQuestions }) => {
     }
   };
 
+  const handleSelectAllInSet = (setQuestions) => {
+    const allSelected = setQuestions.every(q => 
+      selectedQuestions.some(sq => sq.id === q.id)
+    );
+    
+    if (allSelected) {
+      setSelectedQuestions(prev => 
+        prev.filter(q => !setQuestions.some(cq => cq.id === q.id))
+      );
+    } else {
+      const newQuestions = setQuestions.filter(q => 
+        !selectedQuestions.some(sq => sq.id === q.id)
+      );
+      setSelectedQuestions(prev => [...prev, ...newQuestions]);
+    }
+  };
+
   const handleSubmit = () => {
     onSelectQuestions(selectedQuestions);
     onClose();
   };
 
   const handleViewQuestions = (template) => {
-    setExpandedCategory(template.category);
-    setTemplateQuestionsModal(true);
+    setViewingTemplate(template);
+  };
+
+  const handleSubcategorySelect = (subcategory) => {
+    setViewingSubcategory(subcategory);
+  };
+
+  const closeSubcategoryModal = () => {
+    setViewingTemplate(null);
+  };
+
+  const closeQuestionSetModal = () => {
+    setViewingSubcategory(null);
   };
 
   if (!isOpen) return null;
 
+
   return (
+    <>
     <div className="modal-overlay">
       <div className="modal-container">
         {/* Header */}
@@ -96,7 +126,7 @@ const TemplateSelectionModal = ({ isOpen, onClose, onSelectQuestions }) => {
                   <div className="card-footer">
                     <button 
                       className="action-btn secondary"
-                      onClick={() => handleViewQuestions(template)}
+                      onClick={() => {handleViewQuestions(template);}}
                     >
                       <Eye size={16} />
                       Preview
@@ -171,20 +201,34 @@ const TemplateSelectionModal = ({ isOpen, onClose, onSelectQuestions }) => {
           </div>
         </div>
       </div>
+    
 
-      {/* Questions Modal */}
-      {expandedCategory && (
-        <QuestionsByTemplateModal
-          isOpen={templateQuestionsModal}
-          onClose={() => setTemplateQuestionsModal(false)}
-          predefinedQuestions={templates.find(t => t.category === expandedCategory)?.questions || []}
-          selectedQuestions={selectedQuestions}
-          onToggleQuestion={toggleQuestionSelection}
+    
+     
+    </div>
+    {viewingTemplate && (
+        <SubcategoryModal
+          isOpen={!!viewingTemplate}
+          onClose={closeSubcategoryModal}
+          template={viewingTemplate}
+          onSubcategorySelect={handleSubcategorySelect}
         />
       )}
 
-     
-    </div>
+      {/* Question Set Modal */}
+      {viewingTemplate && viewingSubcategory && (
+        <QuestionSetModal
+          isOpen={!!viewingSubcategory}
+          onClose={closeQuestionSetModal}
+          template={viewingTemplate}
+          subcategory={viewingSubcategory}
+          selectedQuestions={selectedQuestions}
+          toggleQuestionSelection={toggleQuestionSelection}
+          onSelectAllInSet={handleSelectAllInSet}
+        />
+      )}
+
+      </>
   );
 };
 

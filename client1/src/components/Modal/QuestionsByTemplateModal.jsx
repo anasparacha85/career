@@ -21,11 +21,11 @@ const categories = [
   { value: 'standards', label: 'Standards & Protocols', icon: CheckCircle2 },
 ];
 
-const difficulties = [
-  { value: 'all', label: 'All Levels' },
-  { value: 'beginner', label: 'Beginner' },
-  { value: 'intermediate', label: 'Intermediate' },
-  { value: 'advanced', label: 'Advanced' },
+const Sets = [
+  { value: 'all', label: 'All Sets' },
+  { value: 'set1', label: 'Set 1' },
+  { value: 'set2', label: 'Set 2' },
+  { value: 'set3', label: 'Set 3' },
 ];
 const QuestionsByTemplateModal = ({
   isOpen,
@@ -34,12 +34,14 @@ const QuestionsByTemplateModal = ({
   selectedQuestions,
   onToggleQuestion
 }) => {
+  console.log(predefinedQuestions);
+  
 
   
   
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [selectedSet, setSelectedSet] = useState('all');
   const [expandedQuestion, setExpandedQuestion] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -50,11 +52,11 @@ const QuestionsByTemplateModal = ({
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'beginner':
+      case 'set1':
         return 'difficulty-beginner';
-      case 'intermediate':
+      case 'set2':
         return 'difficulty-intermediate';
-      case 'advanced':
+      case 'set3':
         return 'difficulty-advanced';
       default:
         return '';
@@ -70,7 +72,7 @@ const QuestionsByTemplateModal = ({
     const matchesCategory =
       selectedCategory === 'all' || q.category === selectedCategory;
     const matchesDifficulty =
-      selectedDifficulty === 'all' || q.difficulty === selectedDifficulty;
+      selectedSet === 'all' || q.set === selectedSet;
     return matchesSearch && matchesCategory && matchesDifficulty;
   });
 
@@ -109,7 +111,7 @@ const QuestionsByTemplateModal = ({
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, selectedCategory, selectedDifficulty]);
+  }, [searchTerm, selectedCategory, selectedSet]);
 
   if (!isOpen) return null;
 
@@ -144,16 +146,29 @@ const QuestionsByTemplateModal = ({
             </div>
 
             <div className="predefined-filter-group">
-              
+               <div className="predefined-filter-section">
+                <label className="predefined-filter-label">Difficulty</label>
+                <select
+                  value={selectedSet}
+                  onChange={(e) => setSelectedSet(e.target.value)}
+                  className="predefined-filter-select"
+                >
+                  {Sets.map((diff) => (
+                    <option key={diff.value} value={diff.value}>
+                      {diff.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
               <div className="predefined-filter-section">
                 <label className="predefined-filter-label">Difficulty</label>
                 <select
-                  value={selectedDifficulty}
-                  onChange={(e) => setSelectedDifficulty(e.target.value)}
+                  value={selectedSet}
+                  onChange={(e) => setSelectedSet(e.target.value)}
                   className="predefined-filter-select"
                 >
-                  {difficulties.map((diff) => (
+                  {Sets.map((diff) => (
                     <option key={diff.value} value={diff.value}>
                       {diff.label}
                     </option>
@@ -204,10 +219,10 @@ const QuestionsByTemplateModal = ({
                     <CategoryIcon size={16} className="category-icon" />
                     <span
                       className={`difficulty-badge ${getDifficultyColor(
-                        question.difficulty
+                        question.set
                       )}`}
                     >
-                      {question.difficulty}
+                      {question.set}
                     </span>
                   </div>
                   <div className="question-text">

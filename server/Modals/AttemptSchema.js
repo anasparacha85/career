@@ -25,7 +25,13 @@ const AttemptSchema = new mongoose.Schema({
       },
       isCorrect: {
         type: Boolean,
-      }
+      },
+       AnswerVideoUrl: {
+        type: String, // cloudinary link for video
+      },
+      AnswerFileUrl: {
+        type: String, // cloudinary link for uploaded PDF/DOC/etc.
+      },
     }
   ],
   score: {
@@ -40,7 +46,7 @@ const AttemptSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  videoUrl: {
+  MergedVideoUrl: {
   type: String,
   default: null
 }

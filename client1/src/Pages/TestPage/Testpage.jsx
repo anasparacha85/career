@@ -1,233 +1,183 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Maximize, Minimize, Clock } from 'lucide-react';
+import { Maximize, Minimize, Clock, Download, Upload, FileText, Timer } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './TestPage.css';
 import Swal from 'sweetalert2';
 import ErrorState from '../../components/States/ErrorState';
 import { CandidateStore } from '../../Contexts/CandidateContexts';
 import LoadingState from '../../components/States/LoadingState';
+import SubmitComponent from './SubmitComponent';
+import NextButtonModal from '../../components/Modal/SavingAnswerStateModal';
+import SavingAnswerStateModal from '../../components/Modal/SavingAnswerStateModal';
+import MessageData from '../../CustomData/Messages/MessageData';
+
 
 const TestPage = () => {
   const { token } = useParams();
   const testContainerRef = useRef(null);
+  const fileInputRef = useRef(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
+  const [uploadedFiles, setUploadedFiles] = useState({});
   const [timeRemaining, setTimeRemaining] = useState(1800);
   const [loading, setLoading] = useState(false);
-  const [SubmitLoading, setSubmitLoading] = useState(false)
+  const [SubmitLoading, setSubmitLoading] = useState(false);
   const [Error, setError] = useState(null);
+  const [currentPart, setCurrentPart] = useState('');
+  const [showSubmit, setShowSubmit] = useState(false)
+  const [showPartTransition, setShowPartTransition] = useState(false);
   const { testData, setTestData, attemptedData, setAttemptedData } = CandidateStore();
+  const [NextLoading, setNextLoading] = useState()
+  const [TimerPaused, setTimerPaused] = useState(false)
+  const timerRef=useRef()
   const navigate = useNavigate();
-  const [count, setcount] = useState(0)
-  const {webcamStream,setWebcamStream,recordedChunks,mediaRecorderRef,screenStream,setScreenStream,InvitationStatus,setInvitationStatus}=CandidateStore()
-   const fetchInviteStatus=async()=>{
-      try {
-        const response=await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_API}/invite/getInviteStatus/${token}`,{
-          method:'GET'
-        })
-        const data=await response.json()
-        console.log(data);
-        if(response.ok){
-          setInvitationStatus(data.status)
-  
-        }
-        else{
-          setError(data.FailureMessage || 'something went wrong')
-        }
-        
-      } catch (error) {
-        setError(error.FailureMessage)
-        
-        
+  const [count, setcount] = useState(0);
+  const {webcamStream,setWebcamStream,recordedChunks,mediaRecorderRef,screenStream,setScreenStream,InvitationStatus,setInvitationStatus}=CandidateStore();
+
+  const fetchInviteStatus=async()=>{
+    try {
+      const response=await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_API}/invite/getInviteStatus/${token}`,{
+        method:'GET'
+      })
+      const data=await response.json()
+      console.log(data);
+      if(response.ok){
+        setInvitationStatus(data.status)
       }
+      else{
+        setError(data.FailureMessage || 'something went wrong')
+      }
+    } catch (error) {
+      setError(error.FailureMessage)
     }
-    useEffect(()=>{
-      fetchInviteStatus()
-    },[])
+  }
 
-useEffect(() => {
-  
-if(InvitationStatus==='completed'){
-  return navigate(`/test-link/${token}`)
-}
- 
-}, [InvitationStatus])
+  useEffect(()=>{
+    fetchInviteStatus()
+  },[])
 
-  // Strict fullscreen control
-  // const enforceFullscreen = async () => {
-  //   try {
-  //     if (!document.fullscreenElement) {
-  //       await testContainerRef.current?.requestFullscreen?.() || 
-  //              testContainerRef.current?.webkitRequestFullscreen?.() || 
-  //              testContainerRef.current?.msRequestFullscreen?.();
-  //     }
-  //     setIsFullscreen(true);
-  //   } catch (err) {
-  //     console.error('Fullscreen error:', err);
-  //   }
-  // };
-
-  // Block all exit attempts
-  // const blockExitAttempts = () => {
-  //   const block = (e) => {
-  //     const forbiddenKeys = ['F11', 'Escape'];
-  //     const forbiddenCombos =
-  //       (e.ctrlKey && ['w', 'n', 't'].includes(e.key.toLowerCase())) ||
-  //       (e.altKey && e.key === 'Tab') ||
-  //       e.keyCode === 9;
-
-  //     if (forbiddenKeys.includes(e.key) || forbiddenCombos) {
-  //       e.preventDefault();
-  //       e.stopPropagation();
-  //       enforceFullscreen(); // Immediately re-enter
-  //     }
-  //   };
-
-  //   const blockContextMenu = (e) => e.preventDefault();
-  //   const blockDragDrop = (e) => e.preventDefault();
-
-  //   document.addEventListener('keydown', block, true); // useCapture: true
-  //   document.addEventListener('contextmenu', blockContextMenu);
-  //   document.addEventListener('dragstart', blockDragDrop);
-  //   document.addEventListener('drop', blockDragDrop);
-
-  //   return () => {
-  //     document.removeEventListener('keydown', block, true);
-  //     document.removeEventListener('contextmenu', blockContextMenu);
-  //     document.removeEventListener('dragstart', blockDragDrop);
-  //     document.removeEventListener('drop', blockDragDrop);
-  //   };
-  // };
-
-  // Detect tab/window switching
-  // const setupTabChangeDetection = () => {
-  //   let lastFocusTime = Date.now();
-    
-  //   const handleVisibilityChange = () => {
-  //     if (document.hidden) {
-  //       const timeAway = Date.now() - lastFocusTime;
-  //       if (timeAway > 1000) { // 1 second threshold
-  //         Swal.fire({
-  //           title: 'Warning!',
-  //           text: 'Switching tabs/windows is not allowed during the test',
-  //           icon: 'warning',
-  //           confirmButtonText: 'OK'
-  //         }).then(() => enforceFullscreen());
-  //       }
-  //     }
-  //     lastFocusTime = Date.now();
-  //   };
-
-  //   const handleBlur = () => {
-  //     setTimeout(() => {
-  //       if (!document.hasFocus()) {
-  //         Swal.fire({
-  //           title: 'Warning!',
-  //           text: 'Please return to the test window',
-  //           icon: 'warning',
-  //           confirmButtonText: 'OK'
-  //         }).then(() => enforceFullscreen());
-  //       }
-  //     }, 500);
-  //   };
-
-  //   document.addEventListener('visibilitychange', handleVisibilityChange);
-  //   window.addEventListener('blur', handleBlur);
-
-  //   return () => {
-  //     document.removeEventListener('visibilitychange', handleVisibilityChange);
-  //     window.removeEventListener('blur', handleBlur);
-  //   };
-  // };
- const fetchTest = async () => {
-      try {
-        const res = await fetch(`http://localhost:5000/test/test-link/${token}`);
-        if (res.ok) {
-          const data = await res.json();
-          setTestData(data);
-          setTimeRemaining(data.duration * 60);
-          // Enforce fullscreen immediately
-          // await enforceFullscreen();
-        } else {
-          setError('Failed to load test');
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error('Failed to fetch test:', error);
-        setLoading(false);
-        setError('Failed to fetch test');
-      }
-    };
   useEffect(() => {
-   
+    if(InvitationStatus==='completed'){
+      return navigate(`/test-link/${token}`)
+    }
+  }, [InvitationStatus])
 
+  const fetchTest = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/test/test-link/${token}`);
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+        setTestData(data);
+        setTimeRemaining(data.duration * 60);
+        
+        // Set initial part
+        if (data.questions && data.questions.length > 0) {
+          setCurrentPart(data.questions[0].part);
+        }
+      } else {
+        setError('Failed to load test');
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error('Failed to fetch test:', error);
+      setLoading(false);
+      setError('Failed to fetch test');
+    }
+  };
+
+  useEffect(() => {
     fetchTest();
-    // const exitBlocker = blockExitAttempts();
-    // const tabChangeMonitor = setupTabChangeDetection();
-
-    // Fullscreen re-enforcement
-    // const fullscreenCheck = setInterval(() => {
-    //   if (!document.fullscreenElement) {
-    //     enforceFullscreen();
-    //   }
-    // }, 1000);
-
-    return () => {
-      // exitBlocker();
-      // tabChangeMonitor();
-      // clearInterval(fullscreenCheck);
-    };
   }, [token]);
 
-
   useEffect(() => {
-    const timer = setInterval(() => {
+    if(TimerPaused) return;
+
+  timerRef.current = setInterval(() => {
       setTimeRemaining(prev => {
         if (prev <= 0) {
-          clearInterval(timer);
+          clearInterval(timerRef.current);
           handleSubmitTest();
           return 0;
         }
         return prev - 1;
       });
+     
     }, 1000);
-   const handlePopState = (e) => {
-    e.preventDefault();
-    window.history.pushState(null, null, window.location.pathname);
-    Swal.fire({
-      title: "Action Blocked!",
-      text: "You cannot go back during the test.",
-      icon: "warning",
-      confirmButtonText: "OK"
-    });
-  };
 
-  window.history.pushState(null, null, window.location.pathname); // Push initial state
-  window.addEventListener('popstate', handlePopState);
+    
+
+    return () => {
+      clearInterval(timerRef.current);
+   
+    };
+  }, [TimerPaused]);
+  useEffect(() => {
+  const handleBeforeUnload = (e) => {
+    e.preventDefault();
+    localStorage.setItem(`autoSubmit${token}`, "true");
+
+    e.returnValue = "Are you sure you want to reload? Your test will be submitted."; 
+    return "Are you sure you want to reload? Your test will be submitted.";
+  };
+  
+
+
+  window.addEventListener("beforeunload", handleBeforeUnload);
 
   return () => {
-    clearInterval(timer);
-    window.removeEventListener('popstate', handlePopState);
+    window.removeEventListener("beforeunload", handleBeforeUnload);
   };
-  }, []);
+}, []);
+useEffect(() => {
+  if (localStorage.getItem(`autoSubmit${token}`) === "true") {
+     handleSubmitTest(); // auto submit
+    localStorage.removeItem(`autoSubmit${token}`);
+   
+  }
+}, []);
+  
 
-  // useEffect(() => {
-  //   const handleEscKey = (event) => {
-  //     if (event.key === 'Escape' && isFullscreen) {
-  //       setIsFullscreen(false);
-  //     }
-  //   };
-  //   document.addEventListener('keydown', handleEscKey);
-  //   return () => document.removeEventListener('keydown', handleEscKey);
-  // }, [isFullscreen]);
+
+  //disable back button
+  useEffect(()=>{
+    const handlePopState = (e) => {
+      e.preventDefault();
+      window.history.pushState(null, null, window.location.pathname);
+      Swal.fire({
+        title: "Action Blocked!",
+        text: "You cannot go back during the test.",
+        icon: "warning",
+        confirmButtonText: "OK"
+      });
+    };
+
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+     return () => {
+    
+      window.removeEventListener('popstate', handlePopState);
+    };
+  },[])
+
+  // Check for part transitions
+  useEffect(() => {
+    if (testData && testData.questions) {
+      const newPart = testData.questions[currentQuestionIndex]?.part;
+      if (newPart && newPart !== currentPart) {
+        setShowPartTransition(true);
+        setCurrentPart(newPart);
+      }
+    }
+  }, [currentQuestionIndex, testData, currentPart]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
-  // change the answers
+
   const handleAnswerChange = (value) => {
     const question = testData.questions[currentQuestionIndex];
     setAnswers(prev => ({
@@ -235,106 +185,197 @@ if(InvitationStatus==='completed'){
       [question._id]: value
     }));
   };
-  //jump to next question
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex < testData.questions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const question = testData.questions[currentQuestionIndex];
+      setUploadedFiles(prev => ({
+        ...prev,
+        [question._id]: file
+      }));
+      
+      // Also add to answers for tracking
+      setAnswers(prev => ({
+        ...prev,
+        [question._id]: file.name
+      }));
     }
   };
-  //jump jo previous question
-  const handlePreviousQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1);
+
+  const downloadQuestionFile = () => {
+    const question = testData.questions[currentQuestionIndex];
+    if (question.questionFile && question.questionFile !== 'question') {
+      // Create download link
+      const link = document.createElement('a');
+      link.href = question.questionFile;
+      link.download = `question_${currentQuestionIndex + 1}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
-  // go to respective question
+  //Save the answer one by one
+  // helper function: har question ke liye naya recorder start karo
+const startNewRecorder = () => {
+  if (!webcamStream || !screenStream) return;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 1280;
+  canvas.height = 720;
+  const ctx = canvas.getContext("2d");
+
+  const webcamVideo = document.createElement("video");
+  webcamVideo.srcObject = webcamStream;
+  webcamVideo.play();
+
+  const screenVideo = document.createElement("video");
+  screenVideo.srcObject = screenStream;
+  screenVideo.play();
+
+  const drawFrame = () => {
+    ctx.drawImage(screenVideo, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(webcamVideo, canvas.width - 320, canvas.height - 240, 320, 240);
+    requestAnimationFrame(drawFrame);
+  };
+  drawFrame();
+
+  const combinedStream = canvas.captureStream(30);
+  const audioTracks = [...webcamStream.getAudioTracks(), ...screenStream.getAudioTracks()];
+  audioTracks.forEach(track => combinedStream.addTrack(track));
+
+  const recorder = new MediaRecorder(combinedStream, { mimeType: "video/webm" });
+  recordedChunks.current = [];
+  recorder.ondataavailable = (event) => {
+    if (event.data.size > 0) {
+      recordedChunks.current.push(event.data);
+    }
+  };
+
+  recorder.start();
+  mediaRecorderRef.current = recorder;
+};
+
+// saveCurrentAnswer update
+const saveCurrentAnswer = async () => {
+  setTimerPaused(true)
+  setNextLoading(true)
+  
+  const question = testData.questions[currentQuestionIndex];
+  const formData = new FormData();
+  formData.append("token", token);
+  formData.append("questionId", question._id);
+  formData.append("answer", answers[question._id] || "");
+
+  if (uploadedFiles[question._id]) {
+    formData.append("file", uploadedFiles[question._id]);
+  }
+
+  // recorder stop + blob send
+  if (mediaRecorderRef.current) {
+    const stopPromise = new Promise(resolve => {
+      mediaRecorderRef.current.onstop = resolve;
+    });
+    mediaRecorderRef.current.stop();
+    await stopPromise;
+
+    if (recordedChunks.current.length > 0) {
+      const blob = new Blob(recordedChunks.current, { type: "video/webm" });
+      formData.append("video", blob, `q_${question._id}.webm`);
+      recordedChunks.current = [];
+    }
+  }
+
+  try {
+    const res = await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_API}/invite/saveQuestion`, {
+      method: "POST",
+      body: formData,
+    });
+    const result = await res.json();
+    console.log(result);
+
+    // ✅ naya recorder start karo next question ke liye
+    startNewRecorder();
+  } catch (error) {
+    console.error("Error saving question:", error);
+  }
+  finally{
+    setTimerPaused(false)
+    setNextLoading(false)
+  }
+};
+
+
+  const handleNextQuestion = async() => {
+   await saveCurrentAnswer();
+  if (currentQuestionIndex < testData.questions.length - 1) {
+    setCurrentQuestionIndex(prev => prev + 1);
+  }
+  if(currentQuestionIndex===testData.questions.length-1){
+    setShowSubmit(true)
+  }
+  };
+ const handleBacktoReview=()=>{
+  setShowSubmit(false)
+  setCurrentQuestionIndex(testData.questions.length-1)
+ }
+  const handlePreviousQuestion =async () => {
+  await saveCurrentAnswer();
+  if (currentQuestionIndex > 0) {
+    setCurrentQuestionIndex(prev => prev - 1);
+  }
+  };
+
   const handleQuestionJump = (index) => {
     setCurrentQuestionIndex(index);
   };
-  // submitting the test
-  var increasecount;
+
+  const handlePartTransitionContinue = () => {
+    setShowPartTransition(false);
+  };
+
+
   const handleSubmitTest = async () => {
-     setSubmitLoading(true)
-     increasecount=setInterval(() => {
-      setcount((prev)=>prev+1)
-     }, 1000);
+  setSubmitLoading(true);
+
   try {
-   
-    // Stop recording if it's active
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      // Create a promise that resolves when recording stops
-      const stopPromise = new Promise((resolve) => {
+    // recording band karo
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      const stopPromise = new Promise(resolve => {
         mediaRecorderRef.current.onstop = resolve;
       });
-      
       mediaRecorderRef.current.stop();
-      
-      await stopPromise; // Wait for recording to actually stop
-    }
-   
-
-    // Combine video chunks
-    const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
-
-    // Create FormData
-    const formData = new FormData();
-    formData.append('video', blob, 'recording.webm');
-    formData.append('token', token);
-    formData.append('answers', JSON.stringify(answers));
-
-    // Log FormData contents for debugging
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
+      await stopPromise;
     }
 
-    // Send to backend
-    const response = await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_API}/invite/submitTest`, {
-      method: 'POST',
-      body: formData,
-      // Don't set Content-Type header manually - let the browser set it with the correct boundary
+    // final merge trigger
+    const res = await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_API}/invite/submitTestFinal`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
     });
 
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! status: ${response.status}`);
-    // }
-
-    const data = await response.json();
-    console.log('Response:', data);
-
+    const data = await res.json();
     if (data.SuccessMessage) {
-      Swal.fire({
-        title: 'Success!',
-        text: data.SuccessMessage,
-        icon: 'success'
-      });
-      setAttemptedData(data);
-       if (webcamStream) {
-      webcamStream.getTracks().forEach(track => track.stop());
-    }
-    if (screenStream) {
-      screenStream.getTracks().forEach(track => track.stop());
-    }
-      navigate('/test-completed-status');
+        if (webcamStream) {
+          webcamStream.getTracks().forEach(track => track.stop());
+        }
+        if (screenStream) {
+          screenStream.getTracks().forEach(track => track.stop());
+        }
+      Swal.fire("Success!", data.SuccessMessage, "success");
+
+      navigate("/test-completed-status");
     } else {
-      Swal.fire({
-        title: 'Error!',
-        text: data.FailureMessage || 'Test submission failed',
-        icon: 'error'
-      });
+      Swal.fire("Error!", data.FailureMessage || "Submission failed", "error");
     }
   } catch (error) {
-    console.error('Submission error:', error);
-    Swal.fire({
-      title: 'Error!',
-      text: 'Something went wrong during submission',
-      icon: 'error'
-    });
-  }
-  finally{
-    setSubmitLoading(false)
-    clearInterval(increasecount)
+    Swal.fire("Error!", "Something went wrong", "error");
+  } finally {
+    setSubmitLoading(false);
   }
 };
+
 
   const toggleFullscreen = () => {
     setIsFullscreen(!isFullscreen);
@@ -342,20 +383,69 @@ if(InvitationStatus==='completed'){
 
   const getAnsweredQuestions = () => Object.keys(answers).length;
 
+  const getPartDescription = (part) => {
+    if (part.toLowerCase().includes('mcq')) {
+      return "You are now entering the Multiple Choice Questions (MCQs) section. Please select the best answer for each question.";
+    } else if (part.toLowerCase().includes('practical')) {
+      return "You are now entering the Practical section. You will need to download question files, complete tasks, and upload your solution files.";
+    }
+    return `You are now entering: ${part}`;
+  };
+
   if (loading) return <div className="loading"><LoadingState text={'Loading Test..'}/></div>;
-  if (Error ) return <ErrorState error={Error} onRetry={()=>fetchTest()} />;
- if(!testData) return <div className=''>not found</div>
-  
+  if (Error) return <ErrorState error={Error} onRetry={()=>fetchTest()} />;
+  if (!testData) return <div className=''>not found</div>;
 
   const currentQuestion = testData.questions[currentQuestionIndex];
   const totalQuestions = testData.questions.length;
 
-  return (
-    <div
-  ref={testContainerRef}
-  className={`test-container ${isFullscreen ? 'fullscreen' : 'windowed'}`}
->
+  // Show part transition modal
+  if (showPartTransition) {
+    return (
+      <div className="test-container">
+        <div className="part-transition-overlay">
+          <div className="part-transition-modal">
+            <h2>Section Transition</h2>
+            <p>{getPartDescription(currentPart)}</p>
+            <button 
+              className="nav-btn" 
+              onClick={handlePartTransitionContinue}
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
+  return (
+    <>
+   {NextLoading && (
+  <SavingAnswerStateModal 
+    heading={
+      currentQuestion.type === "mcq" || currentQuestion.type === "image"
+        ? MessageData.mcqImageHeadings[Math.floor(Math.random() * MessageData.mcqImageHeadings.length)]
+        : MessageData.otherHeadings[Math.floor(Math.random() * MessageData.otherHeadings.length)]
+    }
+    message={
+      currentQuestion.type === "mcq" || currentQuestion.type === "image"
+        ? MessageData.mcqImageMessages[Math.floor(Math.random() * MessageData.mcqImageMessages.length)]
+        : MessageData.otherMessages[Math.floor(Math.random() * MessageData.otherMessages.length)]
+    }
+  />
+)}
+    {showSubmit ? (
+        <SubmitComponent 
+          onsubmit={handleSubmitTest} 
+          onBack={handleBacktoReview}
+        />
+        ):
+        (
+    <div
+      ref={testContainerRef}
+      className={`test-container ${isFullscreen ? 'fullscreen' : 'windowed'}`}
+    >
       <div className="test-header">
         <div className="test-info">
           <h1>{testData.name}</h1>
@@ -403,28 +493,122 @@ if(InvitationStatus==='completed'){
             <div className="question-counter">
               Question {currentQuestionIndex + 1} of {totalQuestions}
             </div>
+            <div className="part-indicator">
+              {currentQuestion.part}
+            </div>
             <h2 className="question-text">{currentQuestion.question}</h2>
           </div>
 
           <div className="answer-section">
-            {currentQuestion.options.map((option, index) => (
-              <div
-                key={index}
-                className={`option-item ${answers[currentQuestion._id] === option ? 'selected' : ''
-                  }`}
-                onClick={() => handleAnswerChange(option)}
-              >
-                <input
-                  type="radio"
-                  name={`question-${currentQuestion._id}`}
-                  value={option}
-                  checked={answers[currentQuestion._id] === option}
-                  onChange={() => handleAnswerChange(option)}
-                  className="option-radio"
-                />
-                <span className="option-text">{option}</span>
+            {/* MCQ Questions */}
+            {currentQuestion.type === 'mcq' && (
+              <div className="mcq-section">
+
+                {currentQuestion.options.map((option, index) => (
+                  
+                  <div
+                    key={index}
+                    className={`option-item ${answers[currentQuestion._id] === option ? 'selected' : ''}`}
+                    onClick={() => handleAnswerChange(option)}
+                  >
+                    <label style={{color:'GrayText' }}>{index+1==1?'A':index+1==2?'B':index+1==3?'C':index+1==4&&'D'}{")"}</label>
+
+                    <input
+                      type="radio"
+                      name={`question-${currentQuestion._id}`}
+                      value={option}
+                      checked={answers[currentQuestion._id] === option}
+                      onChange={() => handleAnswerChange(option)}
+                      className="option-radio"
+                    />
+                    
+                    <span className="option-text">{option}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
+
+            {/* Image Questions */}
+            {currentQuestion.type === 'image' && (
+              <div className="image-section">
+                <div className="question-image-container">
+                  <img 
+                    src={currentQuestion.image} 
+                    alt="Question Image" 
+                    className="question-image"
+                  />
+                </div>
+                <div className="image-options">
+                  {currentQuestion.options.map((option, index) => (
+                    <div
+                      key={index}
+                      className={`option-item ${answers[currentQuestion._id] === option ? 'selected' : ''}`}
+                      onClick={() => handleAnswerChange(option)}
+                    >
+                    <label style={{color:'GrayText' }}>{index+1==1?'A':index+1==2?'B':index+1==3?'C':index+1==4&&'D'}{")"}</label>
+
+                      <input
+                        type="radio"
+                        name={`question-${currentQuestion._id}`}
+                        value={option}
+                        checked={answers[currentQuestion._id] === option}
+                        onChange={() => handleAnswerChange(option)}
+                        className="option-radio"
+                      />
+                      <span className="option-text">{option}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* File/Input Questions (Practical) */}
+            {(currentQuestion.type === 'file' || currentQuestion.type === 'input') && (
+              <div className="practical-section">
+                {currentQuestion.questionFile && currentQuestion.questionFile !== 'question' && (
+                  <div className="file-download-section">
+                    <p className="download-instruction">
+                      Download the file below to see the full question details:
+                    </p>
+                    <button 
+                      className="download-btn"
+                      onClick={downloadQuestionFile}
+                    >
+                      <Download size={16} />
+                      Download Question File
+                    </button>
+                  </div>
+                )}
+                
+                <div className="file-upload-section">
+                  <p className="upload-instruction">
+                    Upload your solution file:
+                  </p>
+                  <div className="upload-container">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      onChange={handleFileUpload}
+                      className="file-input"
+                      accept=".rvt,.dwg,.pdf,.doc,.docx"
+                    />
+                    <button 
+                      className="upload-btn"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <Upload size={16} />
+                      {uploadedFiles[currentQuestion._id] ? 'Change File' : 'Upload Solution'}
+                    </button>
+                  </div>
+                  {uploadedFiles[currentQuestion._id] && (
+                    <div className="uploaded-file-info">
+                      <FileText size={16} />
+                      <span>Uploaded: {uploadedFiles[currentQuestion._id].name}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="navigation-buttons">
@@ -437,20 +621,19 @@ if(InvitationStatus==='completed'){
             </button>
 
             <div style={{ display: 'flex', gap: '12px' }}>
-              {currentQuestionIndex === totalQuestions - 1 ? (
-                <button className="submit-btn" onClick={handleSubmitTest}>
-                 {SubmitLoading?`${count} loading...`:'Submit Test'} 
+             
+                <button disabled={NextLoading} className="nav-btn" onClick={handleNextQuestion}>
+               {NextLoading?"Your answer is saving...":"Save and Next"}  
                 </button>
-              ) : (
-                <button className="nav-btn" onClick={handleNextQuestion}>
-                  Next
-                </button>
-              )}
+             
             </div>
           </div>
         </div>
       </div>
     </div>
+        )}
+        
+    </>
   );
 };
 

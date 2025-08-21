@@ -5,6 +5,8 @@ import InviteModal from '../../components/Modal/InviteModal';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import LoadingState from '../../components/States/LoadingState';
+import { CandidateStore } from '../../Contexts/CandidateContexts';
+
 
 
 const AllTests = () => {
@@ -12,6 +14,8 @@ const AllTests = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedTestId, setSelectedTestId] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showBulkModal, setshowBulkModal] = useState(false)
+
   const [invitationData, setInvitationData] = useState({
     email: '',
     name: '',
@@ -19,8 +23,10 @@ const AllTests = () => {
   });
   const [Error, setError] = useState(null)
   const [Loading, setLoading] = useState(false)
+  const {sendSingleInvitation} =CandidateStore()
 
   const navigate=useNavigate()
+
 
   const fetchTests = async () => {
     try {
@@ -60,6 +66,7 @@ const AllTests = () => {
     setInvitationData({ email: '', name: '', position: '' });
   };
 
+ 
   const handleInputChange = (e) => {
     setInvitationData({
       ...invitationData,
@@ -69,33 +76,8 @@ const AllTests = () => {
 
   const handleSubmitInvitation = async (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch(`${import.meta.env.VITE_LOCAL_BACKEND_API}/invite/sendInvite`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...invitationData,
-          testId: selectedTestId,
-        }),
-      });
-
-      const data = await res.json();
-      
-      if (res.ok) {
-        console.log(data);
-        
-        Swal.fire(data.SuccessMessage)
-        handleCloseModal();
-      } else {
-        Swal.fire(data.FailureMessage || 'Error sending invitation.');
-      }
-    } catch (err) {
-      console.error('Error:', err);
-     
-      Swal.fire('Something went wrong.');
-    }
+ const result = await sendSingleInvitation({ invitationData, testId: selectedTestId });
+  if (result.success) handleCloseModal();
   };
 
   const filteredTests = tests.filter(test =>
@@ -104,6 +86,8 @@ const AllTests = () => {
   );
 
   const selectedTest = tests.find(test => test._id === selectedTestId);
+  console.log("i am selected",selectedTest);
+  
 
   if(Loading){
     return (
@@ -135,7 +119,9 @@ const AllTests = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+             
             </div>
+             <button onClick={()=>navigate('/create-test')} className='new-test-btn'>Create New Tests</button>
           </div>
 
           <div id="all-tests-stats-grid">
@@ -214,16 +200,16 @@ const AllTests = () => {
                     </div>
                   </div>
                   <div className='flex-buttons'>
-                  <button
+                  {/* <button
                     className="all-tests-invite-button"
                     onClick={() => handleOpenModal(test._id)}
                   >
                     <Mail className="all-tests-button-icon" />
                     Send Invitation
-                  </button>
+                  </button> */}
                    <button
                     className="all-tests-invite-button"
-                    onClick={() => navigate(`all-invites/${test._id}`)}
+                    onClick={() => navigate(`/all-invites/${test._id}`)}
                   >
                     <UserRound className="all-tests-button-icon" />
                     Check invites status

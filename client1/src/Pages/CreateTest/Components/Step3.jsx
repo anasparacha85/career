@@ -7,7 +7,7 @@ const Step3GenerateLink = ({ onBack, onReset }) => {
  
   const navigate=useNavigate()
   const handleNavigation = () => {
-    navigate('/all-tests')
+    navigate('/')
 
     
   };

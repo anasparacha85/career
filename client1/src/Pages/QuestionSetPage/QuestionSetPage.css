@@ -1,0 +1,1176 @@
+/* QuestionSetPage.css - Updated to match CreateTest style */
+
+.qset-page {
+  background-color: #f9fafb;
+  min-height: calc(100vh - 64px);
+  padding: 1rem;
+}
+
+/* Header Styles */
+.qset-header {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.qset-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.qset-header-main {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.template-icon {
+  width: 60px;
+  height: 60px;
+  background: rgb(238, 215, 207);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.header-text {
+  flex: 1;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+}
+
+.selection-info {
+  margin-top: 0.5rem;
+}
+
+.selection-count {
+  background: rgb(248, 245, 243);
+  color: orangered;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Content Styles */
+.qset-content {
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.parts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.part-section {
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.part-header {
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.part-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.part-meta {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.part-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.part-select-btn {
+  background: linear-gradient(135deg, rgb(241, 127, 86), orangered);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.part-select-btn.selected {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.part-select-btn.partial {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.expand-icon {
+  color: #6b7280;
+}
+
+/* Questions List */
+.questions-list {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.question-card {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.question-card:hover {
+  border-color: orangered;
+}
+
+.question-card.selected {
+  border-color: #667eea;
+  background-color: rgba(102, 126, 234, 0.05);
+}
+
+.question-content {
+  flex: 1;
+}
+
+.question-header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.question-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+  margin: 0;
+}
+
+.difficulty-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.difficulty-easy {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.difficulty-medium {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+.difficulty-hard {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.question-meta {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.question-type {
+  background-color: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  padding: 0.125rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.question-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-btn, .select-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.view-btn {
+  background-color: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+}
+
+.select-btn {
+  background:  linear-gradient(135deg, rgb(241, 127, 86), orangered);
+  color: white;
+}
+
+.select-btn.selected {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.empty-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: #1f2937;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+/* Footer */
+.qset-footer {
+  background-color: white;
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem;
+  position: sticky;
+  bottom: 0;
+  margin-top: 1.5rem;
+  z-index: 30;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.back-btn {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.footer-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selection-summary {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.done-btn {
+  background:  linear-gradient(135deg, rgb(241, 127, 86), orangered);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.done-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Modal Styles */
+.question-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.question-modal {
+  background-color: white;
+  border-radius: 0.75rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mod-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+   background-color:rgb(255, 249, 247)
+
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.modal-subcategory {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.modal-content {
+  padding: 1.5rem;
+}
+
+.question-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 1rem 0;
+}
+
+.question-description {
+  color: #6b7280;
+  margin: 0 0 1.5rem 0;
+}
+
+.question-options h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 1rem 0;
+}
+
+.options-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.option-item {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+
+.option-item.correct {
+  border-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.05);
+}
+
+.option-letter {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+.option-item.correct .option-letter {
+  background-color: #10b981;
+  color: white;
+}
+
+.correct-indicator {
+  color: #10b981;
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.modal-select-btn, .modal-close-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.modal-select-btn {
+  background:orangered;
+  color: white;
+  border: none;
+}
+
+.modal-select-btn.selected {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.modal-close-btn {
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .qset-header-main {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .part-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .part-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .footer-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .qset-page {
+    padding: 0.5rem;
+  }
+  
+  .qset-header, .qset-content {
+    padding: 1rem;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .modal-select-btn, .modal-close-btn {
+    width: 100%;
+  }
+}
+
+
+
+
+
+/* Input / Practical Question Styles */
+.question-input-details {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-required h5,
+.question-file h5,
+.correct-file h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.input-required ul,
+.question-file ul,
+.correct-file ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.input-required li,
+.question-file a,
+.correct-file a {
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background-color: #f9fafb;
+  color: #1f2937;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.question-file a:hover,
+.correct-file a:hover {
+  border-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+}
+
+.input-required li {
+  background-color: #f3f4f6;
+}
+
+@media (max-width: 480px) {
+  .question-input-details {
+    gap: 0.75rem;
+  }
+  
+  .input-required li,
+  .question-file a,
+  .correct-file a {
+    font-size: 0.9rem;
+    padding: 0.4rem;
+  }
+}
+
+
+/* Sets Container */
+.sets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.set-section {
+  background-color: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.set-header {
+  padding: 1.25rem 1.5rem;
+  background-color: #f9fafb;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.set-header:hover {
+  background-color: #f3f4f6;
+}
+
+.set-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.set-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.set-meta {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Nested parts container */
+.parts-container {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  background-color: white;
+}
+
+/* Adjust part section styling for nested structure */
+.part-section {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  margin-top: 1rem;
+}
+
+.part-header {
+  background-color: white;
+  padding: 0.75rem 1rem;
+}
+
+/* Adjust question card styling for nested structure */
+.questions-list {
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 0.5rem;
+}
+
+/* Add some indentation for nested levels */
+.parts-container .parts-container {
+  padding-left: 0;
+  margin-left: 1rem;
+  border-left: 2px solid #e5e7eb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .set-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .set-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .parts-container {
+    padding: 0 1rem 1rem 1rem;
+  }
+  
+  .parts-container .parts-container {
+    margin-left: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .set-header {
+    padding: 1rem;
+  }
+  
+  .set-title {
+    font-size: 1.1rem;
+  }
+  
+  .part-header {
+    padding: 0.75rem;
+  }
+  
+  .questions-list {
+    padding: 0.25rem;
+  }
+}
+
+/* Set actions styling */
+.set-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.set-select-btn {
+  background: linear-gradient(135deg, rgb(241, 127, 86), orangered);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.set-select-btn:hover{
+   background: linear-gradient(135deg, rgb(241, 156, 125), rgb(240, 85, 29));
+   color: white;
+
+}
+.set-select-btn.selected {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+.set-select-btn.selected:hover{
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+
+}
+
+.set-select-btn.partial {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.set-select-btn.partial:hover {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+   color: white;
+}
+
+
+/* Professional Checkbox Styles - Add these to your QuestionSetPage.css */
+
+/* Set Checkbox Container */
+.set-checkbox-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.25rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.set-checkbox-container:hover {
+  background-color: rgba(245, 112, 64, 0.1);
+}
+
+/* Hide default checkbox */
+.set-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Custom checkmark */
+.set-checkbox-container .checkmark {
+  position: relative;
+  height: 24px;
+  width: 24px;
+  background-color: white;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover effect */
+.set-checkbox-container:hover .checkmark {
+  border-color: rgb(245, 112, 64);
+  box-shadow: 0 0 0 3px rgba(245, 112, 64, 0.1);
+}
+
+/* When checked */
+.set-checkbox-container.checked .checkmark {
+  background: linear-gradient(135deg, rgb(245, 112, 64), orangered);
+  border-color: rgb(245, 112, 64);
+  box-shadow: 0 2px 8px rgba(245, 112, 64, 0.3);
+}
+
+/* When partially selected */
+.set-checkbox-container.partial .checkmark {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-color: #f59e0b;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+/* Checkmark icon */
+.set-checkbox-container .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+  transition: all 0.2s ease;
+}
+
+/* Show checkmark when checked */
+.set-checkbox-container.checked .checkmark::after {
+  display: block;
+  animation: checkmarkSlide 0.3s ease;
+}
+
+/* Partial selection indicator */
+.set-checkbox-container.partial .checkmark::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 2px;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  border-radius: 1px;
+  animation: partialSlide 0.3s ease;
+}
+
+/* Part Checkbox Container */
+.part-checkbox-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.25rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.part-checkbox-container:hover {
+  background-color: rgba(245, 112, 64, 0.08);
+}
+
+/* Hide default checkbox */
+.part-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Custom checkmark for parts */
+.part-checkbox-container .checkmark {
+  position: relative;
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover effect for parts */
+.part-checkbox-container:hover .checkmark {
+  border-color: rgb(245, 112, 64);
+  box-shadow: 0 0 0 2px rgba(245, 112, 64, 0.1);
+}
+
+/* When checked */
+.part-checkbox-container.checked .checkmark {
+  background: linear-gradient(135deg, rgb(245, 112, 64), orangered);
+  border-color: rgb(245, 112, 64);
+  box-shadow: 0 2px 6px rgba(245, 112, 64, 0.25);
+}
+
+/* When partially selected */
+.part-checkbox-container.partial .checkmark {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-color: #f59e0b;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.25);
+}
+
+/* Checkmark icon for parts */
+.part-checkbox-container .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+  transition: all 0.2s ease;
+}
+
+/* Show checkmark when checked */
+.part-checkbox-container.checked .checkmark::after {
+  display: block;
+  animation: checkmarkSlide 0.2s ease;
+}
+
+/* Partial selection indicator for parts */
+.part-checkbox-container.partial .checkmark::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 2px;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  border-radius: 1px;
+  animation: partialSlide 0.2s ease;
+}
+
+/* Question Checkbox Container */
+.question-checkbox-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.question-checkbox-container:hover {
+  background-color: rgba(245, 112, 64, 0.06);
+}
+
+/* Hide default checkbox */
+.question-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Custom checkmark for questions */
+.question-checkbox-container .checkmark {
+  position: relative;
+  height: 18px;
+  width: 18px;
+  background-color: white;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover effect for questions */
+.question-checkbox-container:hover .checkmark {
+  border-color: rgb(245, 112, 64);
+  box-shadow: 0 0 0 2px rgba(245, 112, 64, 0.08);
+}
+
+/* When checked */
+.question-checkbox-container input:checked ~ .checkmark {
+  background: linear-gradient(135deg, rgb(245, 112, 64), orangered);
+  border-color: rgb(245, 112, 64);
+  box-shadow: 0 2px 4px rgba(245, 112, 64, 0.2);
+}
+
+/* Checkmark icon for questions */
+.question-checkbox-container .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 50%;
+  top: 50%;
+  width: 3px;
+  height: 6px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+  transition: all 0.2s ease;
+}
+
+/* Show checkmark when checked */
+.question-checkbox-container input:checked ~ .checkmark::after {
+  display: block;
+  animation: checkmarkSlide 0.2s ease;
+}
+
+/* Animations */
+@keyframes checkmarkSlide {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -60%) rotate(45deg) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -60%) rotate(45deg) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -60%) rotate(45deg) scale(1);
+  }
+}
+
+@keyframes partialSlide {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Focus states for accessibility */
+.set-checkbox:focus + .checkmark,
+.part-checkbox:focus + .checkmark,
+.question-checkbox:focus + .checkmark {
+  box-shadow: 0 0 0 3px rgba(245, 112, 64, 0.2);
+  outline: none;
+}
+
+/* Disabled state */
+.set-checkbox-container.disabled,
+.part-checkbox-container.disabled,
+.question-checkbox-container.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.set-checkbox-container.disabled .checkmark,
+.part-checkbox-container.disabled .checkmark,
+.question-checkbox-container.disabled .checkmark {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .set-checkbox-container .checkmark {
+    height: 22px;
+    width: 22px;
+  }
+  
+  .part-checkbox-container .checkmark {
+    height: 19px;
+    width: 19px;
+  }
+  
+  .question-checkbox-container .checkmark {
+    height: 17px;
+    width: 17px;
+  }
+}
+
+@media (max-width: 480px) {
+  .set-checkbox-container .checkmark {
+    height: 20px;
+    width: 20px;
+  }
+  
+  .part-checkbox-container .checkmark {
+    height: 18px;
+    width: 18px;
+  }
+  
+  .question-checkbox-container .checkmark {
+    height: 16px;
+    width: 16px;
+  }
+  
+  /* Slightly smaller checkmark icons on mobile */
+  .set-checkbox-container .checkmark::after {
+    width: 5px;
+    height: 10px;
+  }
+  
+  .part-checkbox-container .checkmark::after {
+    width: 3px;
+    height: 7px;
+  }
+  
+  .question-checkbox-container .checkmark::after {
+    width: 2px;
+    height: 5px;
+  }
+}
+
+/* Enhanced visual feedback */
+.set-checkbox-container:active .checkmark,
+.part-checkbox-container:active .checkmark,
+.question-checkbox-container:active .checkmark {
+  transform: scale(0.95);
+}
+
+/* Smooth state transitions */
+.set-checkbox-container .checkmark,
+.part-checkbox-container .checkmark,
+.question-checkbox-container .checkmark {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading state for checkboxes */
+.checkbox-loading .checkmark {
+  position: relative;
+  overflow: hidden;
+}
+
+.checkbox-loading .checkmark::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+
+

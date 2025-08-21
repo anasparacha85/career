@@ -17,6 +17,11 @@ const StartTestPage = () => {
 const screenRef = useRef(null);
 const navigate=useNavigate()
 const [Error, setError] = useState(null)
+ const [autoSubmitted, setAutoSubmitted] = useState(false);
+ const handleNavigate=()=>{
+  navigate('/')
+}
+
 
 const {webcamStream,setWebcamStream,recordedChunks,mediaRecorderRef,screenStream,setScreenStream,InvitationStatus,setInvitationStatus}=CandidateStore()
 
@@ -98,6 +103,17 @@ const {webcamStream,setWebcamStream,recordedChunks,mediaRecorderRef,screenStream
       });
   }
 }, [ConsentGiven]);
+// useEffect(() => {
+//   if (localStorage.getItem(`autoSubmit${token}`) === "true") {
+//     localStorage.removeItem(`autoSubmit${token}`);
+//     setAutoSubmitted(true); // update state instead of returning JSX
+//   }
+// }, [token,InvitationStatus]);
+
+// if (autoSubmitted) {
+//   return <TestCompletedState onBack={handleNavigate} />;
+// }
+
 const startTest = async () => {
   try {
     if (!webcamStream || !screenStream) {
@@ -154,13 +170,13 @@ const startTest = async () => {
   }
 };
 
-const handleNavigate=()=>{
-  navigate('/')
-}
+
 
 if (InvitationStatus === 'completed') {
     return <TestCompletedState onBack={handleNavigate} />;
   }
+
+
 
   // Show error state if there's an error
   if (Error) {
